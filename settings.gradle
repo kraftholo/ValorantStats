@@ -8,3 +8,13 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ValorantStats"
 include ':app'
+include ':core'
+include ':weapon'
+include ':weapon:weapon-datasource'
+include ':weapon:weapon-datasource-test'
+include ':weapon:weapon-domain'
+include ':weapon:weapon-interactors'
+include ':weapon:ui-weaponDetail'
+include ':weapon:ui-weaponList'
+include ':constants'
+include ':components'

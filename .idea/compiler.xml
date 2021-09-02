@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="ValorantStats.app" target="11" />
+      <module name="ValorantStats.buildSrc" target="11" />
+      <module name="ValorantStats.components" target="11" />
+      <module name="ValorantStats.weapon.ui-weaponDetail" target="11" />
+      <module name="ValorantStats.weapon.ui-weaponList" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
