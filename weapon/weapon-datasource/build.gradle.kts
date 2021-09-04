@@ -1,9 +1,15 @@
-plugins {
-    id ("java-library")
-    id ("kotlin")
+apply {
+    from("$rootDir/library-build.gradle")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+plugins {
+    kotlin(KotlinPlugins.serialization) version Kotlin.version
+}
+
+dependencies {
+    "implementation"(project(Modules.weaponDomain))
+
+    "implementation"(Ktor.core)
+    "implementation"(Ktor.clientSerialization)
+    "implementation"(Ktor.android)
 }
