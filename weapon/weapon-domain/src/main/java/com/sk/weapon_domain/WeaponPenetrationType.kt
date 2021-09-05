@@ -14,7 +14,7 @@ sealed class WeaponPenetrationType(val uiValue: String, val apiValue: String) {
     object Unknown : WeaponPenetrationType(uiValue = "Unknown", apiValue = "Unknown")
 }
 
-fun WeaponPenetrationType.getWeaponPenetrationTypeFromUiValue(uiValue: String): WeaponPenetrationType {
+fun getWeaponPenetrationTypeFromUiValue(uiValue: String): WeaponPenetrationType {
     return when (uiValue) {
         WeaponPenetrationType.High.uiValue -> {
             WeaponPenetrationType.High
@@ -31,7 +31,7 @@ fun WeaponPenetrationType.getWeaponPenetrationTypeFromUiValue(uiValue: String): 
     }
 }
 
-fun WeaponPenetrationType.getWeaponPenetrationTypeFromApiValue(apiValue: String): WeaponPenetrationType {
+fun getWeaponPenetrationTypeFromApiValue(apiValue: String): WeaponPenetrationType {
     return when (apiValue) {
         WeaponPenetrationType.High.apiValue -> {
             WeaponPenetrationType.High

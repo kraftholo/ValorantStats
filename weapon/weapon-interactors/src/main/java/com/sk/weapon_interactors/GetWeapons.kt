@@ -5,6 +5,7 @@ import com.sk.core.domain.ProgressBarState
 import com.sk.core.domain.UIComponent
 import com.sk.weapon_datasource.network.WeaponService
 import com.sk.weapon_domain.Weapon
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -17,6 +18,9 @@ class GetWeapons(
             emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
 
             val weapons: List<Weapon> = try {
+
+                delay(1000)
+
                 service.getWeaponStats()
             } catch (e: Exception) {
                 e.printStackTrace()

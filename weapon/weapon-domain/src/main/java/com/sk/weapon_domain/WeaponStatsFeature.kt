@@ -20,7 +20,7 @@ sealed class WeaponStatsFeature(
 
 }
 
-fun WeaponStatsFeature.getWeaponStatsFeatureFromUiValue(uiValue: String): WeaponStatsFeature {
+fun getWeaponStatsFeatureFromUiValue(uiValue: String): WeaponStatsFeature {
     return when (uiValue) {
         WeaponStatsFeature.ROFIncrease.uiValue -> {
             WeaponStatsFeature.ROFIncrease
@@ -36,18 +36,19 @@ fun WeaponStatsFeature.getWeaponStatsFeatureFromUiValue(uiValue: String): Weapon
     }
 }
 
-fun WeaponStatsFeature.getWeaponStatsFeatureFromApiValue(apiValue: String): WeaponStatsFeature {
-    return when (apiValue) {
-        WeaponStatsFeature.ROFIncrease.apiValue -> {
-            WeaponStatsFeature.ROFIncrease
+fun getWeaponStatsFeatureFromApiValue(apiValue: String?): WeaponStatsFeature {
+    apiValue?.let {
+        return when (apiValue) {
+            WeaponStatsFeature.ROFIncrease.apiValue -> {
+                WeaponStatsFeature.ROFIncrease
+            }
+            WeaponStatsFeature.Silenced.apiValue -> {
+                WeaponStatsFeature.Silenced
+            }
+            WeaponStatsFeature.DualZoom.apiValue -> {
+                WeaponStatsFeature.DualZoom
+            }
+            else -> WeaponStatsFeature.Unknown
         }
-        WeaponStatsFeature.Silenced.apiValue -> {
-            WeaponStatsFeature.Silenced
-        }
-        WeaponStatsFeature.DualZoom.apiValue -> {
-            WeaponStatsFeature.DualZoom
-        }
-
-        else -> WeaponStatsFeature.Unknown
-    }
+    } ?: return WeaponStatsFeature.Unknown
 }

@@ -47,4 +47,8 @@ dependencies {
 
     implementation(Google.material)
 
+    "implementation"(project(Modules.core))
+    "implementation"(project(Modules.weaponDomain))
+    "implementation"(project(Modules.weaponInteractors))
+
 }

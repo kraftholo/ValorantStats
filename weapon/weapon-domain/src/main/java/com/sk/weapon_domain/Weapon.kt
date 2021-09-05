@@ -8,7 +8,7 @@ data class Weapon(
     val defaultSkinUUID: String,
     val displayIcon: String,
     val killStreamIcon: String,
-    val weaponStats: WeaponStats
+    val weaponStats: WeaponStats?
 
     //altShotgunStats,airBurstStats,damageRanges,skins left
 

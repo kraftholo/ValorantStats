@@ -14,7 +14,7 @@ sealed class WeaponCategory(
 }
 
 //kotlin extension functions to help
-fun WeaponCategory.getWeaponCategoryFromUiValue(uiValue: String): WeaponCategory {
+fun getWeaponCategoryFromUiValue(uiValue: String): WeaponCategory {
     return when (uiValue) {
         WeaponCategory.Heavy.uiValue -> {
             WeaponCategory.Heavy
@@ -36,7 +36,7 @@ fun WeaponCategory.getWeaponCategoryFromUiValue(uiValue: String): WeaponCategory
     }
 }
 
-fun WeaponCategory.getWeaponCategoryFromApiValue(apiValue: String): WeaponCategory {
+fun getWeaponCategoryFromApiValue(apiValue: String): WeaponCategory {
     return when (apiValue) {
         WeaponCategory.Heavy.apiValue -> {
             WeaponCategory.Heavy

@@ -14,7 +14,7 @@ sealed class WeaponAltFireType(val uiValue: String, val apiValue: String) {
     object Unknown : WeaponAltFireType(uiValue = "Unknown", apiValue = "Unknown")
 }
 
-fun WeaponAltFireType.getWeaponAltFireTypeFromUiValue(uiValue: String): WeaponAltFireType {
+fun getWeaponAltFireTypeFromUiValue(uiValue: String): WeaponAltFireType {
     return when (uiValue) {
         WeaponAltFireType.ADS.uiValue -> {
             WeaponAltFireType.ADS
@@ -31,19 +31,23 @@ fun WeaponAltFireType.getWeaponAltFireTypeFromUiValue(uiValue: String): WeaponAl
     }
 }
 
-fun WeaponAltFireType.getWeaponPenetrationTypeFromApiValue(apiValue: String): WeaponAltFireType {
-    return when (apiValue) {
-        WeaponAltFireType.ADS.apiValue -> {
-            WeaponAltFireType.ADS
-        }
+fun getWeaponAltFireTypeFromApiValue(apiValue: String?): WeaponAltFireType {
 
-        WeaponAltFireType.AirBurst.apiValue -> {
-            WeaponAltFireType.AirBurst
-        }
+    apiValue?.let {
+        return when (apiValue) {
+            WeaponAltFireType.ADS.apiValue -> {
+                WeaponAltFireType.ADS
+            }
 
-        WeaponAltFireType.Shotgun.apiValue -> {
-            WeaponAltFireType.Shotgun
+            WeaponAltFireType.AirBurst.apiValue -> {
+                WeaponAltFireType.AirBurst
+            }
+
+            WeaponAltFireType.Shotgun.apiValue -> {
+                WeaponAltFireType.Shotgun
+            }
+            else -> WeaponAltFireType.Unknown
         }
-        else -> WeaponAltFireType.Unknown
-    }
+    } ?: return WeaponAltFireType.Unknown
+
 }

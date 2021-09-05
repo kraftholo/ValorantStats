@@ -13,7 +13,7 @@ sealed class WeaponFireModeType(
     object Unknown : WeaponFireModeType(uiValue = "Unknown", apiValue = "Unknown")
 }
 
-fun WeaponFireModeType.getWeaponFireModeTypeFromUiValue(uiValue: String): WeaponFireModeType {
+fun getWeaponFireModeTypeFromUiValue(uiValue: String): WeaponFireModeType {
     return when (uiValue) {
 
         WeaponFireModeType.SemiAutomatic.uiValue -> {
@@ -26,14 +26,17 @@ fun WeaponFireModeType.getWeaponFireModeTypeFromUiValue(uiValue: String): Weapon
 
 }
 
-fun WeaponFireModeType.getWeaponFireModeTypeFromApiValue(apiValue: String): WeaponFireModeType {
-    return when (apiValue) {
+fun getWeaponFireModeTypeFromApiValue(apiValue: String?): WeaponFireModeType {
+    apiValue?.let {
+        return when (apiValue) {
 
-        WeaponFireModeType.SemiAutomatic.apiValue -> {
-            WeaponFireModeType.SemiAutomatic
+            WeaponFireModeType.SemiAutomatic.apiValue -> {
+                WeaponFireModeType.SemiAutomatic
+            }
+
+            else -> WeaponFireModeType.Unknown
+
         }
+    } ?: return WeaponFireModeType.Unknown
 
-        else -> WeaponFireModeType.Unknown
-
-    }
 }
