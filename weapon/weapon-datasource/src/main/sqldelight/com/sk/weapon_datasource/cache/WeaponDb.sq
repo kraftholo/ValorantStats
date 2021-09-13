@@ -1,0 +1,80 @@
+CREATE TABLE weapon_Entity(
+	uuid TEXT NOT NULL PRIMARY KEY,
+	displayName TEXT NOT NULL,
+	category TEXT NOT NULL,
+	defaultSkinUUID TEXT NOT NULL,
+	displayIcon TEXT NOT NULL,
+	killStreamIcon TEXT NOT NULL,
+
+
+	hasWeaponStats INTEGER DEFAULT 0,
+	fireRate REAL DEFAULT NULL,
+	magazineSize INTEGER DEFAULT NULL,
+	runSpeedMultiplier REAL DEFAULT NULL,
+	equipTimeSeconds REAL DEFAULT NULL,
+	reloadTimeSeconds REAL DEFAULT NULL,
+	firstBulletAccuracy REAL DEFAULT NULL,
+	shotgunPelletCount INTEGER DEFAULT NULL,
+	wallPenetration TEXT DEFAULT NULL,
+	feature TEXT DEFAULT NULL,
+	fireMode TEXT DEFAULT NULL,
+	altFireType TEXT DEFAULT NULL,
+
+	hasADSStats INTEGER DEFAULT 0,
+	zoomMultiplierADS REAL DEFAULT NULL,
+	fireRateADS REAL DEFAULT NULL,
+	runSpeedMultiplierADS REAL DEFAULT NULL,
+	burstCountADS INTEGER DEFAULT NULL,
+	firstBulletAccuracyADS REAL DEFAULT NULL
+);
+
+selectAll:
+SELECT * FROM weapon_Entity;
+
+insertWeapon:
+INSERT OR REPLACE 
+INTO weapon_Entity(
+	uuid,
+	displayName,
+	category,
+	defaultSkinUUID,
+	displayIcon,
+	killStreamIcon,
+	
+	hasWeaponStats,
+	fireRate,
+	magazineSize,
+	runSpeedMultiplier,
+	equipTimeSeconds,
+	reloadTimeSeconds,
+	firstBulletAccuracy,
+	shotgunPelletCount,
+	wallPenetration,
+	feature,
+	fireMode,
+	altFireType,
+
+	hasADSStats,
+	zoomMultiplierADS,
+	fireRateADS,
+	runSpeedMultiplierADS,
+	burstCountADS,
+	firstBulletAccuracyADS
+	
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+searchWeaponByName:
+SELECT * FROM weapon_Entity
+WHERE displayName LIKE ('%' ||:query||'%');
+
+searchWeaponByCategory:
+SELECT * FROM weapon_Entity
+WHERE category LIKE ('%'|| :query || '%');
+
+getWeapon:
+SELECT * FROM weapon_Entity
+WHERE uuid = :uuid;
+
+removeWeapon:
+DELETE FROM weapon_Entity
+WHERE uuid = :uuid;
