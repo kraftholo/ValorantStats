@@ -22,6 +22,7 @@ import com.sk.core.util.Logger
 import com.sk.valorantstats.ui.theme.ValorantStatsTheme
 import com.sk.weapon_domain.Weapon
 import com.sk.weapon_interactors.WeaponInteractors
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +35,12 @@ class MainActivity : ComponentActivity() {
         val weapons: MutableState<List<Weapon>> = mutableStateOf(listOf())
         val progressBarState: MutableState<ProgressBarState> = mutableStateOf(ProgressBarState.Idle)
 
-        val getWeapons = WeaponInteractors.build().getWeapons
+        val androidDriver = AndroidSqliteDriver(
+            WeaponInteractors.schema,
+            this,
+            WeaponInteractors.dbName
+        )
+        val getWeapons = WeaponInteractors.build(androidDriver).getWeapons
         val logger = Logger("GetWeaponsTest")
 
         getWeapons.execute().onEach { dataState ->

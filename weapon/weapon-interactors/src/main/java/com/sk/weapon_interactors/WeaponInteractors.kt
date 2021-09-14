@@ -1,6 +1,9 @@
 package com.sk.weapon_interactors
 
+import com.sk.weapon_datasource.cache.WeaponCache
+import com.sk.weapon_datasource.cache.WeaponDatabase
 import com.sk.weapon_datasource.network.WeaponService
+import com.squareup.sqldelight.db.SqlDriver
 
 class WeaponInteractors(
     val getWeapons: GetWeapons
@@ -8,12 +11,19 @@ class WeaponInteractors(
 
     // viewmodel will not know how it is actually implemented inside
     companion object Factory {
-        fun build() : WeaponInteractors {
+        fun build(sqlDriver: SqlDriver) : WeaponInteractors {
             val service = WeaponService.build()
             return WeaponInteractors(
-                getWeapons = GetWeapons(service = service)
+                getWeapons = GetWeapons(
+                    service = service,
+                    cache = WeaponCache.build(sqlDriver)
+                )
             )
         }
+
+        //Will be used to make the android sqldriver
+        val schema = WeaponDatabase.Schema
+        val dbName = "weapons.db"
     }
 
 }

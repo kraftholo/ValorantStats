@@ -3,6 +3,7 @@ package com.sk.weapon_interactors
 import com.sk.core.domain.DataState
 import com.sk.core.domain.ProgressBarState
 import com.sk.core.domain.UIComponent
+import com.sk.weapon_datasource.cache.WeaponCache
 import com.sk.weapon_datasource.network.WeaponService
 import com.sk.weapon_domain.Weapon
 import kotlinx.coroutines.delay
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetWeapons(
-    val service: WeaponService
+    val service: WeaponService,
+    val cache : WeaponCache
 ) {
 
     fun execute(): Flow<DataState<List<Weapon>>> = flow {
@@ -35,7 +37,11 @@ class GetWeapons(
                 listOf()
             }
 
-            emit(DataState.Data(weapons))
+            //insert into the cache
+            //then read the cache and display the results ( single source of truth)
+            cache.insert(weapons)
+            val cachedData = cache.getAllWeapons()
+            emit(DataState.Data(cachedData))
 
         } catch (e: Exception) {
             e.printStackTrace();

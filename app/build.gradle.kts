@@ -51,4 +51,6 @@ dependencies {
     "implementation"(project(Modules.weaponDomain))
     "implementation"(project(Modules.weaponInteractors))
 
+    "implementation"(SqlDelight.androidDriver)
+
 }
