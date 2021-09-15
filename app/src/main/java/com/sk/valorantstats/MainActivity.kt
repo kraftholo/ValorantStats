@@ -19,6 +19,8 @@ import com.sk.core.domain.DataState
 import com.sk.core.domain.ProgressBarState
 import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
+import com.sk.ui.WeaponList
+import com.sk.ui.WeaponListState
 import com.sk.valorantstats.ui.theme.ValorantStatsTheme
 import com.sk.weapon_domain.Weapon
 import com.sk.weapon_interactors.WeaponInteractors
@@ -29,15 +31,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class MainActivity : ComponentActivity() {
+
+    //Todo - Ui logic will later be managed by a viewmodel
+    private val state : MutableState<WeaponListState>  = mutableStateOf(WeaponListState())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val weapons: MutableState<List<Weapon>> = mutableStateOf(listOf())
-        val progressBarState: MutableState<ProgressBarState> = mutableStateOf(ProgressBarState.Idle)
-
         val androidDriver = AndroidSqliteDriver(
             WeaponInteractors.schema,
-            this,
+            applicationContext,
             WeaponInteractors.dbName
         )
         val getWeapons = WeaponInteractors.build(androidDriver).getWeapons
@@ -47,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
             when (dataState) {
                 is DataState.Loading -> {
-                    progressBarState.value = dataState.progressBarState
+                    state.value = state.value.copy(progressBarState = dataState.progressBarState)
                 }
 
                 is DataState.Response -> {
@@ -62,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 is DataState.Data -> {
-                    weapons.value = dataState.data ?: listOf()
+                    state.value = state.value.copy(weapons = dataState.data ?: listOf())
                 }
             }
 
@@ -72,19 +75,7 @@ class MainActivity : ComponentActivity() {
             ValorantStatsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface() {
-
-                    Box(Modifier.fillMaxSize()) {
-                        LazyColumn {
-                            items(weapons.value) {
-                                Text(it.displayName)
-                            }
-                        }
-
-                        if (progressBarState.value == ProgressBarState.Loading) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    }
-
+                    WeaponList(state.value)
                 }
             }
         }

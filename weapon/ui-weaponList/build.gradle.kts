@@ -4,4 +4,9 @@ apply{
 
 dependencies{
     // UI Module specific dependencies here
+    "implementation"(project(Modules.core))
+    "implementation"(project(Modules.weaponDomain))
+    "implementation"(project(Modules.weaponInteractors))
+
+    "implementation"(SqlDelight.androidDriver)
 }
