@@ -9,18 +9,23 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import coil.ImageLoader
 import com.sk.components.WeaponListItem
 import com.sk.core.domain.ProgressBarState
 
 @Composable
 fun WeaponList(
-    state : WeaponListState
-)
-{
+    state: WeaponListState,
+    imageLoader: ImageLoader
+) {
     Box(Modifier.fillMaxSize()) {
         LazyColumn {
             items(state.weapons) {
-                WeaponListItem(it,{})
+                WeaponListItem(
+                    weapon = it,
+                    onSelectWeapon = {},
+                    imageLoader = imageLoader
+                )
             }
         }
 

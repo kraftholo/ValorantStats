@@ -1,7 +1,9 @@
 package com.sk.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -10,16 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.rememberImagePainter
 import com.sk.ui.test.TAG_WEAPON_NAME
+import com.sk.ui_weaponlist.R
 import com.sk.weapon_domain.Weapon
 
 @Composable
 fun WeaponListItem(
     weapon: Weapon,
     onSelectWeapon: (String) -> Unit,
+    imageLoader: ImageLoader
 ) {
 
     Surface(
@@ -37,12 +44,21 @@ fun WeaponListItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                // TODO(Replace with Image)
+            val painter = rememberImagePainter(
+                weapon.displayIcon,
+                imageLoader,
+                builder = {
+                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                }
+            )
+            Image(
                 modifier = Modifier
                     .width(120.dp)
                     .height(70.dp)
-                    .background(Color.LightGray),
+                ,
+                painter = painter,
+                contentDescription = weapon.displayName,
+                contentScale = ContentScale.Fit,
             )
             Column(
                 modifier = Modifier
@@ -73,7 +89,7 @@ fun WeaponListItem(
             ) {
                 val fireMode = weapon.weaponStats?.fireMode
                 Text(
-                    text = fireMode?.uiValue ?: "No fire mode" ,
+                    text = fireMode?.uiValue ?: "No fire mode",
                     style = MaterialTheme.typography.caption,
                     //color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
                 )

@@ -15,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import coil.ImageLoader
 import com.sk.core.domain.DataState
 import com.sk.core.domain.ProgressBarState
 import com.sk.core.domain.UIComponent
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
 
     //Todo - Ui logic will later be managed by a viewmodel
     private val state : MutableState<WeaponListState>  = mutableStateOf(WeaponListState())
+    private lateinit var imageLoader : ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,13 @@ class MainActivity : ComponentActivity() {
         )
         val getWeapons = WeaponInteractors.build(androidDriver).getWeapons
         val logger = Logger("GetWeaponsTest")
+
+        imageLoader = ImageLoader.Builder(applicationContext)
+            .error(R.drawable.error_image)
+            .placeholder(R.drawable.white_background)
+            .availableMemoryPercentage(0.25)
+            .crossfade(true)
+            .build()
 
         getWeapons.execute().onEach { dataState ->
 
@@ -75,7 +84,7 @@ class MainActivity : ComponentActivity() {
             ValorantStatsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface() {
-                    WeaponList(state.value)
+                    WeaponList(state.value,imageLoader)
                 }
             }
         }

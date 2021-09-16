@@ -7,6 +7,7 @@ dependencies{
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.weaponDomain))
     "implementation"(project(Modules.weaponInteractors))
+    "implementation"(Coil.coil)
 
     "implementation"(SqlDelight.androidDriver)
 }

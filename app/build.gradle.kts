@@ -46,6 +46,7 @@ dependencies {
     implementation(Compose.hiltNavigation)
 
     implementation(Google.material)
+    implementation(Coil.coil)
 
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.weaponDomain))
