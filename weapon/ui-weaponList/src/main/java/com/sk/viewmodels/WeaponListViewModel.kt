@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sk.core.domain.DataState
 import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
+import com.sk.ui.WeaponListEvent
 import com.sk.ui.WeaponListState
 import com.sk.weapon_interactors.GetWeapons
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,14 +21,26 @@ class WeaponListViewModel
 @Inject
 constructor
     (
-    getWeapons: GetWeapons,
-    savedStateHandle: SavedStateHandle
+    val getWeapons: GetWeapons,
+    val savedStateHandle: SavedStateHandle,
+    val logger: Logger
 ) : ViewModel() {
 
     val state: MutableState<WeaponListState> = mutableStateOf(WeaponListState())
 
     init {
-        val logger = Logger("GetWeaponsTest")
+        onTriggerEvent(WeaponListEvent.GetWeaponList)
+    }
+
+    fun onTriggerEvent(event: WeaponListEvent) {
+        when (event) {
+            is WeaponListEvent.GetWeaponList -> {
+                getWeaponList()
+            }
+        }
+    }
+
+    private fun getWeaponList() {
         getWeapons.execute().onEach { dataState ->
 
             when (dataState) {
@@ -53,4 +66,5 @@ constructor
 
         }.launchIn(viewModelScope)
     }
+
 }

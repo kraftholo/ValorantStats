@@ -1,5 +1,6 @@
 package com.sk.di
 
+import com.sk.core.util.Logger
 import com.sk.weapon_interactors.GetWeapons
 import com.sk.weapon_interactors.WeaponInteractors
 import dagger.Module
@@ -18,7 +19,10 @@ object WeaponListModule {
         return interactors.getWeapons
     }
 
-
+    @Provides
+    fun provideLogger(): Logger {
+        return Logger("WeaponList")
+    }
 
 
 }

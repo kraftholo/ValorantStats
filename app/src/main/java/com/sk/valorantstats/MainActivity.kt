@@ -35,28 +35,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    //Todo - Ui logic will later be managed by a viewmodel
-
-    private lateinit var imageLoader : ImageLoader
+    @Inject
+    lateinit var imageLoader : ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        imageLoader = ImageLoader.Builder(applicationContext)
-            .error(R.drawable.error_image)
-            .placeholder(R.drawable.white_background)
-            .availableMemoryPercentage(0.25)
-            .crossfade(true)
-            .build()
-
         setContent {
             ValorantStatsTheme {
                 val viewModel : WeaponListViewModel =  hiltViewModel()
+
                 // A surface container using the 'background' color from the theme
                 Surface() {
                     WeaponList(viewModel.state.value,imageLoader)
