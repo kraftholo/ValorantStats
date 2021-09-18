@@ -1,7 +1,8 @@
+
 apply{
     from("$rootDir/android-library-build.gradle")
 }
 
-dependencies{
+dependencies {
     // UI Module specific dependencies here
 }

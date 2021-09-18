@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -47,6 +49,11 @@ dependencies {
 
     implementation(Google.material)
     implementation(Coil.coil)
+
+
+    implementation(Hilt.android)
+    kapt(Hilt.compiler)
+
 
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.weaponDomain))
