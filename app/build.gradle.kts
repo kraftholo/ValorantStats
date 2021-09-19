@@ -44,8 +44,10 @@ dependencies {
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.tooling)
+
+    //navigation dependencies
     implementation(Compose.navigation)
-    implementation(Compose.hiltNavigation)
+    implementation(Compose.hiltNavigation)  //helps to create viewModels on a per backstackentry basis
 
     implementation(Google.material)
     implementation(Coil.coil)
@@ -58,7 +60,8 @@ dependencies {
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.weaponDomain))
     "implementation"(project(Modules.weaponInteractors))
-    "implementation"((project(Modules.ui_weaponList)))
+    "implementation"(project(Modules.ui_weaponList))
+    "implementation"(project(Modules.ui_weaponDetail))
 
     "implementation"(SqlDelight.androidDriver)
 

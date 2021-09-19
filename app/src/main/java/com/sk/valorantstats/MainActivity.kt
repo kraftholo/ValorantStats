@@ -11,12 +11,20 @@ import androidx.compose.material.CircularProgressIndicator
 
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.NamedNavArgument
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import com.sk.core.domain.DataState
 import com.sk.core.domain.ProgressBarState
@@ -24,6 +32,8 @@ import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
 import com.sk.ui.WeaponList
 import com.sk.ui.WeaponListState
+import com.sk.ui_weapondetail.WeaponDetail
+import com.sk.valorantstats.navigation.Screen
 import com.sk.valorantstats.ui.theme.ValorantStatsTheme
 import com.sk.viewmodels.WeaponListViewModel
 import com.sk.weapon_domain.Weapon
@@ -41,7 +51,7 @@ class MainActivity : ComponentActivity() {
 
     //Todo - Ui logic will later be managed by a viewmodel
 
-    private lateinit var imageLoader : ImageLoader
+    private lateinit var imageLoader: ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +66,59 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ValorantStatsTheme {
-                val viewModel : WeaponListViewModel =  hiltViewModel()
-                // A surface container using the 'background' color from the theme
-                Surface() {
-                    WeaponList(viewModel.state.value,imageLoader)
-                }
+                // navigation setup
+                val navController = rememberNavController()
+                NavHost(navController = navController,
+                    startDestination = Screen.WeaponList.route,
+                    builder = {
+                        //This will add the two destinations to my navigation graph
+                        addWeaponList(
+                            route = Screen.WeaponDetail.route + "/{weaponUUID}",
+                            Screen.WeaponDetail.arguments
+                        )
+
+                        addWeaponDetail(
+                            route = Screen.WeaponList.route,
+                            arguments = emptyList(),
+                            navController = navController
+                        )
+                    }
+                )
+
+
             }
         }
     }
+
+
+    //Helper functions to add destinations into the navigation graph
+    fun NavGraphBuilder.addWeaponList(route: String, arguments: List<NamedNavArgument>) {
+        return composable(
+            route = route,                     //look at the Screen.WeaponDetail object
+            arguments = arguments
+        ) {
+            WeaponDetail(weaponUUID = it.arguments?.get("weaponUUID") as String)
+        }
+    }
+
+    fun NavGraphBuilder.addWeaponDetail(
+        route: String,
+        arguments: List<NamedNavArgument>,
+        navController: NavController
+    ) {
+        return composable(
+            route = route
+        ) {
+            val viewModel: WeaponListViewModel = hiltViewModel()
+            WeaponList(viewModel.state.value, imageLoader,
+                navigateToDetailScreen = { weaponUUID ->
+                    navController.navigate("${Screen.WeaponDetail.route}/$weaponUUID")
+                }
+            )
+
+        }
+    }
+
+
 }
 

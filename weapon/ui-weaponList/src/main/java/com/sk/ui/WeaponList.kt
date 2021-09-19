@@ -16,14 +16,17 @@ import com.sk.core.domain.ProgressBarState
 @Composable
 fun WeaponList(
     state: WeaponListState,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    navigateToDetailScreen: (String) -> Unit
 ) {
     Box(Modifier.fillMaxSize()) {
         LazyColumn {
             items(state.weapons) {
                 WeaponListItem(
                     weapon = it,
-                    onSelectWeapon = {},
+                    onSelectWeapon = { weaponUUID ->
+                        navigateToDetailScreen(weaponUUID)
+                    },
                     imageLoader = imageLoader
                 )
             }

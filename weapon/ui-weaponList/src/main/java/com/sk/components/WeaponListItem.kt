@@ -35,7 +35,7 @@ fun WeaponListItem(
             .padding(bottom = 8.dp)
             .background(MaterialTheme.colors.surface)
             .clickable {
-                onSelectWeapon(weapon.UUID)
+                onSelectWeapon(weapon.UUID)         //use lambda passed
             },
         elevation = 8.dp
     ) {
