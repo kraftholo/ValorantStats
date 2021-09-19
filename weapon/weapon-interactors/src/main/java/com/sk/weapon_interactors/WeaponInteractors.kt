@@ -6,16 +6,21 @@ import com.sk.weapon_datasource.network.WeaponService
 import com.squareup.sqldelight.db.SqlDriver
 
 class WeaponInteractors(
-    val getWeapons: GetWeapons
+    val getWeapons: GetWeapons,
+    val getWeaponsFromCache: GetWeaponFromCache
 ) {
 
     // viewmodel will not know how it is actually implemented inside
     companion object Factory {
-        fun build(sqlDriver: SqlDriver) : WeaponInteractors {
+        fun build(sqlDriver: SqlDriver): WeaponInteractors {
             val service = WeaponService.build()
             return WeaponInteractors(
                 getWeapons = GetWeapons(
                     service = service,
+                    cache = WeaponCache.build(sqlDriver)
+                ),
+
+                getWeaponsFromCache = GetWeaponFromCache(
                     cache = WeaponCache.build(sqlDriver)
                 )
             )

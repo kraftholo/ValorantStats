@@ -30,12 +30,13 @@ import com.sk.core.domain.DataState
 import com.sk.core.domain.ProgressBarState
 import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
-import com.sk.ui.WeaponList
-import com.sk.ui.WeaponListState
+import com.sk.ui_weaponlist.ui.WeaponList
+import com.sk.ui_weaponlist.ui.WeaponListState
 import com.sk.ui_weapondetail.WeaponDetail
+import com.sk.ui_weapondetail.viewmodels.WeaponDetailViewModel
 import com.sk.valorantstats.navigation.Screen
 import com.sk.valorantstats.ui.theme.ValorantStatsTheme
-import com.sk.viewmodels.WeaponListViewModel
+import com.sk.ui_weaponlist.viewmodels.WeaponListViewModel
 import com.sk.weapon_domain.Weapon
 import com.sk.weapon_interactors.WeaponInteractors
 import com.squareup.sqldelight.android.AndroidSqliteDriver
@@ -91,17 +92,18 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    //Helper functions to add destinations into the navigation graph
-    fun NavGraphBuilder.addWeaponList(route: String, arguments: List<NamedNavArgument>) {
+    //Helper Extension functions to add destinations into the navigation graph
+    private fun NavGraphBuilder.addWeaponList(route: String, arguments: List<NamedNavArgument>) {
         return composable(
             route = route,                     //look at the Screen.WeaponDetail object
             arguments = arguments
         ) {
-            WeaponDetail(weaponUUID = it.arguments?.get("weaponUUID") as String)
+            val viewModel : WeaponDetailViewModel = hiltViewModel()
+            WeaponDetail(viewModel.state.value)
         }
     }
 
-    fun NavGraphBuilder.addWeaponDetail(
+    private fun NavGraphBuilder.addWeaponDetail(
         route: String,
         arguments: List<NamedNavArgument>,
         navController: NavController

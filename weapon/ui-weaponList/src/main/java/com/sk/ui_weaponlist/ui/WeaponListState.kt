@@ -1,4 +1,4 @@
-package com.sk.ui
+package com.sk.ui_weaponlist.ui
 
 import com.sk.core.domain.ProgressBarState
 import com.sk.weapon_domain.Weapon

@@ -1,4 +1,4 @@
-package com.sk.viewmodels
+package com.sk.ui_weaponlist.viewmodels
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sk.core.domain.DataState
 import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
-import com.sk.ui.WeaponListState
+import com.sk.ui_weaponlist.ui.WeaponListState
 import com.sk.weapon_interactors.GetWeapons
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -20,14 +20,18 @@ class WeaponListViewModel
 @Inject
 constructor
     (
-    getWeapons: GetWeapons,
-    savedStateHandle: SavedStateHandle
+    val getWeapons: GetWeapons,
+    val savedStateHandle: SavedStateHandle,
+    //val logger : Logger
 ) : ViewModel() {
 
     val state: MutableState<WeaponListState> = mutableStateOf(WeaponListState())
 
     init {
-        val logger = Logger("GetWeaponsTest")
+        getWeapons()
+    }
+
+    private fun getWeapons(){
         getWeapons.execute().onEach { dataState ->
 
             when (dataState) {
@@ -38,10 +42,10 @@ constructor
                 is DataState.Response -> {
                     when (dataState.uiComponent) {
                         is UIComponent.Dialog -> {
-                            logger.log((dataState.uiComponent as UIComponent.Dialog).description)
+                            //logger.log((dataState.uiComponent as UIComponent.Dialog).description)
                         }
                         is UIComponent.None -> {
-                            logger.log((dataState.uiComponent as UIComponent.None).message)
+                            //logger.log((dataState.uiComponent as UIComponent.None).message)
                         }
                     }
                 }

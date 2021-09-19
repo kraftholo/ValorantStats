@@ -1,4 +1,4 @@
-package com.sk.components
+package com.sk.ui_weaponlist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
-import com.sk.ui.test.TAG_WEAPON_NAME
+import com.sk.ui_weaponlist.ui.test.TAG_WEAPON_NAME
 import com.sk.ui_weaponlist.R
 import com.sk.weapon_domain.Weapon
 

@@ -1,4 +1,4 @@
-package com.sk.ui
+package com.sk.ui_weaponlist.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil.ImageLoader
-import com.sk.components.WeaponListItem
+import com.sk.ui_weaponlist.components.WeaponListItem
 import com.sk.core.domain.ProgressBarState
 
 @Composable

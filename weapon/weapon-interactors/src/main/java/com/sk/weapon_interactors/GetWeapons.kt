@@ -21,7 +21,7 @@ class GetWeapons(
 
             val weapons: List<Weapon> = try {
 
-                delay(1000)
+                delay(1000)     //just to show loading
 
                 service.getWeaponStats()
             } catch (e: Exception) {
