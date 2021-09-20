@@ -1,4 +1,4 @@
-package com.sk.ui_weaponlist.di
+package com.sk.di
 
 import com.sk.core.util.Logger
 import com.sk.weapon_interactors.GetWeapons

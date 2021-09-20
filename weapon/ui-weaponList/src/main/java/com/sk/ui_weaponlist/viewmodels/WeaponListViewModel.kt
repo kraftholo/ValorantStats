@@ -1,4 +1,4 @@
-package com.sk.ui_weaponlist.viewmodels
+package com.sk.viewmodels
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +31,7 @@ constructor
         getWeapons()
     }
 
-    private fun getWeapons(){
+    private fun getWeapons() {
         getWeapons.execute().onEach { dataState ->
 
             when (dataState) {
