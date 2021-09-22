@@ -6,7 +6,7 @@ sealed class WeaponFireModeType(
 ) {
 
     object SemiAutomatic : WeaponFireModeType(
-        uiValue = "WeaponFireMode",
+        uiValue = "SemiAutomatic",
         apiValue = "EWeaponFireModeDisplayType::SemiAutomatic"
     )
 

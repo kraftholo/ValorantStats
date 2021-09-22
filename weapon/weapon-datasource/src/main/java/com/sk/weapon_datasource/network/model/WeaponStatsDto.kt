@@ -43,6 +43,9 @@ data class WeaponStatsDto(
     @SerialName("adsStats")
     val adsStats: ADSStatsDto?,
 ) {
+    override fun toString(): String {
+        return "WeaponStatsDto(fireRate=$fireRate, magazineSize=$magazineSize, runSpeedMultiplier=$runSpeedMultiplier, equipTimeSeconds=$equipTimeSeconds, reloadTimeSeconds=$reloadTimeSeconds, firstBulletAccuracy=$firstBulletAccuracy, shotgunPelletCount=$shotgunPelletCount, wallPenetration='$wallPenetration', feature=$feature, fireMode=$fireMode, altFireType=$altFireType, adsStats=$adsStats)"
+    }
 }
 
 fun WeaponStatsDto.toWeaponStats(): WeaponStats {

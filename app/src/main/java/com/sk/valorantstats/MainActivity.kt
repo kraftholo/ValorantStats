@@ -23,10 +23,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    //Todo - Ui logic will later be managed by a viewmodel
-
     @Inject
-    private lateinit var imageLoader: ImageLoader
+    lateinit var imageLoader: ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,5 +1,6 @@
 package com.sk.ui_weaponlist.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import coil.compose.rememberImagePainter
 import com.sk.ui_weaponlist.ui.test.TAG_WEAPON_NAME
 import com.sk.ui_weaponlist.R
 import com.sk.weapon_domain.Weapon
+import com.sk.weapon_domain.WeaponFireModeType
 
 @Composable
 fun WeaponListItem(
@@ -28,6 +30,8 @@ fun WeaponListItem(
     onSelectWeapon: (String) -> Unit,
     imageLoader: ImageLoader
 ) {
+
+    Log.d("WeaponListItem", "weapon = $weapon")
 
     Surface(
         modifier = Modifier
@@ -54,15 +58,14 @@ fun WeaponListItem(
             Image(
                 modifier = Modifier
                     .width(120.dp)
-                    .height(70.dp)
-                ,
+                    .height(70.dp),
                 painter = painter,
                 contentDescription = weapon.displayName,
                 contentScale = ContentScale.Fit,
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(.8f) // fill 80% of remaining width
+                    .fillMaxWidth(.5f) // fill 80% of remaining width
                     .padding(start = 12.dp)
             ) {
                 Text(
@@ -88,8 +91,10 @@ fun WeaponListItem(
                 horizontalAlignment = Alignment.End
             ) {
                 val fireMode = weapon.weaponStats?.fireMode
+                var fireModeText = ""
+                if (fireMode != WeaponFireModeType.Unknown) fireModeText = fireMode?.uiValue ?: ""
                 Text(
-                    text = fireMode?.uiValue ?: "No fire mode",
+                    text = fireModeText,
                     style = MaterialTheme.typography.caption,
                     //color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
                 )

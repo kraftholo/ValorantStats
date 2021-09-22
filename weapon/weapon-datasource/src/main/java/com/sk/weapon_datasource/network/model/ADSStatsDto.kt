@@ -22,6 +22,9 @@ data class ADSStatsDto(
     @SerialName("firstBulletAccuracy")
     val firstBulletAccuracy: Float
 ) {
+    override fun toString(): String {
+        return "ADSStatsDto(zoomMultiplier=$zoomMultiplier, fireRate=$fireRate, runSpeedMultiplier=$runSpeedMultiplier, burstCount=$burstCount, firstBulletAccuracy=$firstBulletAccuracy)"
+    }
 }
 
 fun ADSStatsDto.toADSStats(): WeaponADSStats {

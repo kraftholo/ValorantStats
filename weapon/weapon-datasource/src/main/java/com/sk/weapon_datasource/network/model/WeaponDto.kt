@@ -29,6 +29,9 @@ data class WeaponDto(
     @SerialName("weaponStats")
     val weaponStats: WeaponStatsDto?
 ) {
+    override fun toString(): String {
+        return "WeaponDto(UUID='$UUID', displayName='$displayName', category='$category', defaultSkinUUID='$defaultSkinUUID', displayIcon='$displayIcon', killStreamIcon='$killStreamIcon', weaponStats=$weaponStats)"
+    }
 }
 
 fun WeaponDto.toWeapon(): Weapon {
