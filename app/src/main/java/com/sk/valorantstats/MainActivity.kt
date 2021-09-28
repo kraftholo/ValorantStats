@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
             arguments = arguments
         ) {
             val viewModel: WeaponDetailViewModel = hiltViewModel()
-            WeaponDetail(viewModel.state.value)
+            WeaponDetail(viewModel.state.value,imageLoader)
         }
     }
 

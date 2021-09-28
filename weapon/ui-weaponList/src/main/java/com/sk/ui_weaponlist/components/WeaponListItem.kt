@@ -22,7 +22,6 @@ import coil.compose.rememberImagePainter
 import com.sk.ui_weaponlist.ui.test.TAG_WEAPON_NAME
 import com.sk.ui_weaponlist.R
 import com.sk.weapon_domain.Weapon
-import com.sk.weapon_domain.WeaponFireModeType
 
 @Composable
 fun WeaponListItem(
@@ -90,11 +89,8 @@ fun WeaponListItem(
                     .padding(end = 12.dp),
                 horizontalAlignment = Alignment.End
             ) {
-                val fireMode = weapon.weaponStats?.fireMode
-                var fireModeText = ""
-                if (fireMode != WeaponFireModeType.Unknown) fireModeText = fireMode?.uiValue ?: ""
                 Text(
-                    text = fireModeText,
+                    text = weapon.weaponStats?.fireMode?.uiValue ?: "",
                     style = MaterialTheme.typography.caption,
                     //color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
                 )

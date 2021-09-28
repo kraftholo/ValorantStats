@@ -10,7 +10,7 @@ sealed class WeaponFireModeType(
         apiValue = "EWeaponFireModeDisplayType::SemiAutomatic"
     )
 
-    object Unknown : WeaponFireModeType(uiValue = "Unknown", apiValue = "Unknown")
+    object Automatic : WeaponFireModeType(uiValue = "Automatic", apiValue = "")     //Api gives null for automatic
 }
 
 fun getWeaponFireModeTypeFromUiValue(uiValue: String): WeaponFireModeType {
@@ -20,7 +20,7 @@ fun getWeaponFireModeTypeFromUiValue(uiValue: String): WeaponFireModeType {
             WeaponFireModeType.SemiAutomatic
         }
 
-        else -> WeaponFireModeType.Unknown
+        else -> WeaponFireModeType.Automatic
 
     }
 
@@ -34,9 +34,9 @@ fun getWeaponFireModeTypeFromApiValue(apiValue: String?): WeaponFireModeType {
                 WeaponFireModeType.SemiAutomatic
             }
 
-            else -> WeaponFireModeType.Unknown
+            else -> WeaponFireModeType.Automatic
 
         }
-    } ?: return WeaponFireModeType.Unknown
+    } ?: return WeaponFireModeType.Automatic
 
 }
