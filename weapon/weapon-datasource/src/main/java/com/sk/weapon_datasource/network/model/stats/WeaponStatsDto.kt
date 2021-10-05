@@ -1,6 +1,7 @@
-package com.sk.weapon_datasource.network.model
+package com.sk.weapon_datasource.network.model.stats
 
-import com.sk.weapon_domain.*
+import com.sk.weapon_domain.stats.*
+import com.sk.weapon_domain.stats.WeaponStats
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -6,16 +6,19 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.sk.ui_weapondetail.ui.WeaponDetailState
 import com.sk.ui_weaponlist.R
+import com.sk.weapon_domain.Weapon
 
 @Composable
 fun WeaponDetail(
@@ -107,3 +110,24 @@ fun WeaponDetail(
         }
     }
 }
+
+@Composable
+fun WeaponBaseStats(
+    weapon: Weapon,
+    padding: Dp,
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = 8.dp,
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding)
+        ) {
+
+        }
+    }
+}
+

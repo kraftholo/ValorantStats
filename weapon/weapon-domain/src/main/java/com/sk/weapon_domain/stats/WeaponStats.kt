@@ -1,5 +1,4 @@
-package com.sk.weapon_domain
-
+package com.sk.weapon_domain.stats
 
 data class WeaponStats(
     val fireRate: Float?,

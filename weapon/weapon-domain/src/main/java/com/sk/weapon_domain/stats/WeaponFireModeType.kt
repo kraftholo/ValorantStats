@@ -1,4 +1,4 @@
-package com.sk.weapon_domain
+package com.sk.weapon_domain.stats
 
 sealed class WeaponFireModeType(
     val uiValue: String,

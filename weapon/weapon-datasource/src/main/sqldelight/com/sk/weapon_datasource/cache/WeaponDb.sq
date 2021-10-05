@@ -1,3 +1,9 @@
+
+-- Weapon Table
+    -- Skin Table
+        -- Chroma Table
+        -- Level Table
+
 CREATE TABLE weapon_Entity(
 	uuid TEXT NOT NULL PRIMARY KEY,
 	displayName TEXT NOT NULL,
@@ -25,10 +31,42 @@ CREATE TABLE weapon_Entity(
 	fireRateADS REAL DEFAULT NULL,
 	runSpeedMultiplierADS REAL DEFAULT NULL,
 	burstCountADS INTEGER DEFAULT NULL,
-	firstBulletAccuracyADS REAL DEFAULT NULL
+	firstBulletAccuracyADS REAL DEFAULT NULL,
+
+	shopDataCost INTEGER DEFAULT 0
+
 );
 
-selectAll:
+CREATE TABLE skin_Entity(
+    weaponUUID TEXT NOT NULL ,
+    uuid TEXT NOT NULL PRIMARY KEY,
+    displayName TEXT NOT NULL,
+    themeUuid TEXT NOT NULL,
+    contentTierUuid TEXT DEFAULT NULL,
+    displayIcon TEXT NOT NULL
+);
+
+CREATE TABLE chroma_Entity (
+    skinUUID TEXT NOT NULL,
+    uuid TEXT NOT NULL PRIMARY KEY,
+    displayName TEXT NOT NULL,
+    displayIcon TEXT NOT NULL,
+    fullRender TEXT NOT NULL,
+    swatch TEXT DEFAULT NULL,
+    streamedVideo TEXT DEFAULT NULL
+);
+
+CREATE TABLE level_Entity (
+    skinUUID TEXT NOT NULL,
+    uuid TEXT NOT NULL PRIMARY KEY,
+    displayName TEXT NOT NULL,
+    displayIcon TEXT NOT NULL,
+    streamedVideo TEXT DEFAULT NULL
+);
+
+
+-- WeaponTable Functions
+selectAllWeapons:
 SELECT * FROM weapon_Entity;
 
 insertWeapon:
@@ -59,9 +97,11 @@ INTO weapon_Entity(
 	fireRateADS,
 	runSpeedMultiplierADS,
 	burstCountADS,
-	firstBulletAccuracyADS
+	firstBulletAccuracyADS,
+
+	shopDataCost
 	
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 searchWeaponByName:
 SELECT * FROM weapon_Entity
@@ -78,3 +118,75 @@ WHERE uuid = :uuid;
 removeWeapon:
 DELETE FROM weapon_Entity
 WHERE uuid = :uuid;
+
+-- SkinTable Functions-------------------------------------------------------
+insertSkin:
+INSERT OR REPLACE
+INTO skin_Entity(
+    weaponUUID,
+    uuid,
+    displayName,
+    themeUuid,
+    contentTierUuid,
+    displayIcon
+) VALUES (?,?,?,?,?,?);
+
+getSkins:
+SELECT * FROM skin_Entity
+WHERE weaponUUID = :weaponUUID;
+
+removeAllSkinsForWeapon:
+DELETE FROM skin_Entity
+WHERE weaponUUID = :weaponUUID;
+
+removeSkin:
+DELETE FROM skin_Entity
+WHERE uuid = :uuid;
+
+-- LevelTable Functions-------------------------------------------------------
+insertLevel:
+INSERT OR REPLACE
+INTO level_Entity(
+    skinUUID,
+    uuid,
+    displayName,
+    displayIcon,
+    streamedVideo
+) VALUES (?,?,?,?,?);
+
+getLevels:
+SELECT * FROM level_Entity
+WHERE skinUUID = :skinUUID;
+
+removeLevel:
+DELETE FROM level_Entity
+WHERE uuid = :uuid;
+
+removeAllLevelsForSkin:
+DELETE FROM level_Entity
+WHERE skinUUID = :skinUUID;
+
+-- ChromaTable Functions-------------------------------------------------------
+insertChroma:
+INSERT OR REPLACE
+INTO chroma_Entity(
+    skinUUID,
+    uuid,
+    displayName,
+    displayIcon,
+    fullRender,
+    swatch,
+    streamedVideo
+) VALUES(?,?,?,?,?,?,?);
+
+getChromas:
+SELECT * FROM chroma_Entity
+WHERE skinUUID = :skinUUID;
+
+removeChroma:
+DELETE FROM chroma_Entity
+WHERE uuid = :uuid;
+
+removeAllChromasForSkin:
+DELETE FROM chroma_Entity
+WHERE skinUUID = :skinUUID;

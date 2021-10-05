@@ -1,6 +1,9 @@
 package com.sk.weapon_datasource.cache
 
 import com.sk.weapon_domain.Weapon
+import com.sk.weapon_domain.skin.Chroma
+import com.sk.weapon_domain.skin.Level
+import com.sk.weapon_domain.skin.Skin
 
 class WeaponCacheImpl(
     val database: WeaponDatabase
@@ -9,7 +12,7 @@ class WeaponCacheImpl(
     val queries = database.weaponDbQueries
 
     override suspend fun getAllWeapons(): List<Weapon> {
-        return queries.selectAll().executeAsList().map { it.toWeapon() }
+        return queries.selectAllWeapons().executeAsList().map { it.toWeapon() }
     }
 
     override suspend fun insert(weapons: List<Weapon>) {
@@ -54,13 +57,18 @@ class WeaponCacheImpl(
                 runSpeedMultiplierADS = weaponStats?.adsStats?.runSpeedMultiplier?.toDouble(),
                 firstBulletAccuracyADS = weaponStats?.adsStats?.firstBulletAccuracy?.toDouble(),
                 zoomMultiplierADS = weaponStats?.adsStats?.zoomMultiplier?.toDouble(),
-                burstCountADS = weaponStats?.adsStats?.burstCount?.toLong()
+                burstCountADS = weaponStats?.adsStats?.burstCount?.toLong(),
+                shopDataCost = shopData.cost.toLong()
             )
         }
     }
 
     override suspend fun getWeaponsByCategory(category: String): List<Weapon> {
-       return queries.searchWeaponByCategory(category).executeAsList().map{it.toWeapon()}
+       return queries.searchWeaponByCategory(category).executeAsList().map{
+           it.toWeapon().apply {
+            //Todo
+           }
+       }
     }
 
     override suspend fun getWeaponByName(displayName: String): Weapon {
@@ -74,4 +82,54 @@ class WeaponCacheImpl(
     override suspend fun removeWeaponByUUID(uuid: String) {
        return queries.removeWeapon(uuid)
     }
+
+    override suspend fun insertSkin(skin: Skin) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getSkinsForWeapon(weaponUuid: String): List<Skin> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeAllSkinsForWeapon(weaponUuid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeSkin(uuid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertLevel(level: Level) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getLevelsForSkin(skinUuid: String): List<Level> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeAllLevelsForSkin(skinUuid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeLevel(uuid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertChroma(chroma: Chroma) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getChromasForSkin(skinUuid: String): List<Chroma> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeAllChromaForSkin(skinUuid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeChroma(uuid: String) {
+        TODO("Not yet implemented")
+    }
+
+
 }

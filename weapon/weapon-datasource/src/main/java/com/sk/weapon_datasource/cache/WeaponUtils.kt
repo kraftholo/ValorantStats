@@ -1,14 +1,21 @@
 package com.sk.weapon_datasource.cache
 
 import com.sk.weapon_domain.*
+import com.sk.weapon_domain.skin.Chroma
+import com.sk.weapon_domain.skin.Level
+import com.sk.weapon_domain.skin.Skin
+import com.sk.weapon_domain.stats.*
+import com.sk.weapondatasource.cache.Chroma_Entity
+import com.sk.weapondatasource.cache.Level_Entity
+import com.sk.weapondatasource.cache.Skin_Entity
 import com.sk.weapondatasource.cache.Weapon_Entity
 
-fun Weapon_Entity.toWeapon() : Weapon{
-    var weaponStats : WeaponStats? = null
-    var weaponADSStats : WeaponADSStats? = null
+fun Weapon_Entity.toWeapon(): Weapon {
+    var weaponStats: WeaponStats? = null
+    var weaponADSStats: WeaponADSStats? = null
 
     hasADSStats?.let {
-        if(it.toInt() == 1){
+        if (it.toInt() == 1) {
             weaponADSStats = WeaponADSStats(
                 zoomMultiplierADS?.toFloat(),
                 fireRateADS?.toFloat(),
@@ -20,7 +27,7 @@ fun Weapon_Entity.toWeapon() : Weapon{
     }
 
     hasWeaponStats?.let {
-        if(it.toInt() == 1){
+        if (it.toInt() == 1) {
             weaponStats = WeaponStats(
                 fireRate?.toFloat(),
                 magazineSize?.toInt(),
@@ -29,7 +36,7 @@ fun Weapon_Entity.toWeapon() : Weapon{
                 reloadTimeSeconds?.toFloat(),
                 firstBulletAccuracy?.toFloat(),
                 shotgunPelletCount?.toInt(),
-                wallPenetration?.let {pen -> getWeaponPenetrationTypeFromUiValue(pen)},
+                wallPenetration?.let { pen -> getWeaponPenetrationTypeFromUiValue(pen) },
                 feature?.let { feat -> getWeaponStatsFeatureFromUiValue(feat) },
                 fireMode?.let { fMode -> getWeaponFireModeTypeFromUiValue(fMode) },
                 altFireType?.let { altFMode -> getWeaponAltFireTypeFromUiValue(altFMode) },
@@ -45,5 +52,39 @@ fun Weapon_Entity.toWeapon() : Weapon{
         displayIcon = displayIcon,
         killStreamIcon = killStreamIcon,
         weaponStats = weaponStats,
+        shopData = ShopData(cost = shopDataCost?.toInt() ?: 0),
+        skins = listOf()
+    )
+}
+
+fun Skin_Entity.toSkin(): Skin {
+    return Skin(
+        uuid = uuid,
+        displayName = displayName,
+        themeUuid = themeUuid,
+        contentTierUuid = contentTierUuid,
+        displayIcon = displayIcon,
+        chromas = listOf(),
+        levels = listOf()
+    )
+}
+
+fun Chroma_Entity.toChroma(): Chroma {
+    return Chroma(
+        uuid = uuid,
+        displayName = displayName,
+        displayIcon = displayIcon,
+        fullRender = fullRender,
+        swatch = swatch,
+        streamedVideo = streamedVideo
+    )
+}
+
+fun Level_Entity.toLevel(): Level {
+    return Level(
+        uuid = uuid,
+        displayName = displayName,
+        displayIcon = displayIcon,
+        streamedVideo = streamedVideo
     )
 }

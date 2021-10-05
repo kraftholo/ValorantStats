@@ -1,4 +1,4 @@
-package com.sk.weapon_domain
+package com.sk.weapon_domain.stats
 
 sealed class WeaponAltFireType(val uiValue: String, val apiValue: String) {
 

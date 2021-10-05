@@ -1,4 +1,4 @@
-package com.sk.weapon_domain
+package com.sk.weapon_domain.stats
 
 data class WeaponADSStats(
     val zoomMultiplier: Float?,
