@@ -29,9 +29,6 @@ fun WeaponListItem(
     onSelectWeapon: (String) -> Unit,
     imageLoader: ImageLoader
 ) {
-
-    Log.d("WeaponListItem", "weapon = $weapon")
-
     Surface(
         modifier = Modifier
             .fillMaxWidth()

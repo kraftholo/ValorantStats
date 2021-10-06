@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShopDataDto(
+
     @SerialName("cost")
     val cost: Int
 ) {

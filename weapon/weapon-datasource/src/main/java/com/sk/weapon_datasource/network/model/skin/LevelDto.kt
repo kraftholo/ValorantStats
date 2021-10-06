@@ -10,13 +10,13 @@ data class LevelDto(
     val uuid: String,
 
     @SerialName("displayName")
-    val displayName: String,
+    val displayName: String?,
 
     @SerialName("displayIcon")
-    val displayIcon: String,
+    val displayIcon: String?,
 
     @SerialName("streamedVideo")
-    val streamedVideo: String,
+    val streamedVideo: String?,
 
     ) {
     override fun toString(): String {

@@ -139,9 +139,6 @@ removeAllSkinsForWeapon:
 DELETE FROM skin_Entity
 WHERE weaponUUID = :weaponUUID;
 
-removeSkin:
-DELETE FROM skin_Entity
-WHERE uuid = :uuid;
 
 -- LevelTable Functions-------------------------------------------------------
 insertLevel:
@@ -157,10 +154,6 @@ INTO level_Entity(
 getLevels:
 SELECT * FROM level_Entity
 WHERE skinUUID = :skinUUID;
-
-removeLevel:
-DELETE FROM level_Entity
-WHERE uuid = :uuid;
 
 removeAllLevelsForSkin:
 DELETE FROM level_Entity
@@ -182,10 +175,6 @@ INTO chroma_Entity(
 getChromas:
 SELECT * FROM chroma_Entity
 WHERE skinUUID = :skinUUID;
-
-removeChroma:
-DELETE FROM chroma_Entity
-WHERE uuid = :uuid;
 
 removeAllChromasForSkin:
 DELETE FROM chroma_Entity

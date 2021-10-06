@@ -5,9 +5,9 @@ data class Skin(
     val displayName: String,
     val themeUuid: String,
     val contentTierUuid: String?,
-    val displayIcon: String,
-    val chromas: List<Chroma>,
-    val levels: List<Level>
+    val displayIcon: String?,
+    var chromas: List<Chroma>,
+    var levels: List<Level>
 ) {
     override fun toString(): String {
         return "Skin(uuid='$uuid', displayName='$displayName', themeUuid='$themeUuid', contentTierUuid=$contentTierUuid, displayIcon='$displayIcon', chromas=$chromas, levels=$levels)"

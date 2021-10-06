@@ -10,6 +10,7 @@ import com.sk.weapon_domain.getWeaponCategoryFromApiValue
 import com.sk.weapon_domain.skin.Skin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.logging.Logger
 
 @Serializable
 data class WeaponDto(
@@ -36,7 +37,7 @@ data class WeaponDto(
     val weaponStats: WeaponStatsDto?,
 
     @SerialName("shopData")
-    val shopData: ShopDataDto,
+    val shopData: ShopDataDto?,
 
     @SerialName("skins")
     val skins: List<SkinDto>
@@ -70,7 +71,7 @@ fun WeaponDto.toWeapon(): Weapon {
         displayIcon = displayIcon,
         killStreamIcon = killStreamIcon,
         weaponStats = weaponStats?.toWeaponStats(),
-        shopData = shopData.toWeaponShopData(),
+        shopData = shopData?.toWeaponShopData(),
         skins = getSkins()
     )
 }

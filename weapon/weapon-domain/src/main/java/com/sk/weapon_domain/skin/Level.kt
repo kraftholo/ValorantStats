@@ -2,8 +2,8 @@ package com.sk.weapon_domain.skin
 
 data class Level(
     val uuid: String,
-    val displayName: String,
-    val displayIcon: String,
+    val displayName: String?,
+    val displayIcon: String?,
     val streamedVideo: String?
 ) {
     override fun toString(): String {

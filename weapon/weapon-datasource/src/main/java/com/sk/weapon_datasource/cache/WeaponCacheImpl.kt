@@ -11,20 +11,22 @@ class WeaponCacheImpl(
 
     val queries = database.weaponDbQueries
 
-    override suspend fun getAllWeapons(): List<Weapon> {
-        return queries.selectAllWeapons().executeAsList().map { it.toWeapon() }
-    }
-
-    override suspend fun insert(weapons: List<Weapon>) {
-        for(weapon in weapons){
-            try{
+    override suspend fun insertWeapons(weapons: List<Weapon>) {
+        for (weapon in weapons) {
+            try {
                 insertWeapon(weapon)    // Insert others even if one fails
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
+    //gets weapons BUT no Skins
+    override suspend fun getAllWeapons(): List<Weapon> {
+        return queries.selectAllWeapons().executeAsList().map { it.toWeapon() }
+    }
+
+    //inserts all Weapons+Skins
     override suspend fun insertWeapon(weapon: Weapon) {
         return weapon.run {
             queries.insertWeapon(
@@ -58,77 +60,87 @@ class WeaponCacheImpl(
                 firstBulletAccuracyADS = weaponStats?.adsStats?.firstBulletAccuracy?.toDouble(),
                 zoomMultiplierADS = weaponStats?.adsStats?.zoomMultiplier?.toDouble(),
                 burstCountADS = weaponStats?.adsStats?.burstCount?.toLong(),
-                shopDataCost = shopData.cost.toLong()
+                shopDataCost = shopData?.cost?.toLong() ?: 0
             )
+
+            //Insert Skins
+            skins.forEach { skin ->
+                queries.insertSkin(
+                    weaponUUID = this.UUID,
+                    uuid = skin.uuid,
+                    displayName = skin.displayName,
+                    themeUuid = skin.themeUuid,
+                    contentTierUuid = skin.contentTierUuid,
+                    displayIcon = skin.displayIcon ?: ""
+                )
+
+                //Insert Chromas
+                skin.chromas.forEach { chroma ->
+                    queries.insertChroma(
+                        skinUUID = skin.uuid,
+                        uuid = chroma.uuid,
+                        displayName = chroma.displayName,
+                        displayIcon = chroma.displayIcon ?: "",
+                        fullRender = chroma.fullRender,
+                        swatch = chroma.swatch,
+                        streamedVideo = chroma.streamedVideo
+                    )
+                }
+
+                //Insert Levels
+                skin.levels.forEach { level ->
+                    queries.insertLevel(
+                        skinUUID = skin.uuid,
+                        uuid = level.uuid,
+                        displayName = level.displayName ?: "",
+                        displayIcon = level.displayIcon ?: "",
+                        streamedVideo = level.streamedVideo
+                    )
+                }
+            }
         }
     }
 
+    //Weapons( no skins)
     override suspend fun getWeaponsByCategory(category: String): List<Weapon> {
-       return queries.searchWeaponByCategory(category).executeAsList().map{
-           it.toWeapon().apply {
-            //Todo
-           }
-       }
+        return queries.searchWeaponByCategory(category).executeAsList().map { it.toWeapon() }
     }
 
+    //Weapon(no skins)
     override suspend fun getWeaponByName(displayName: String): Weapon {
-       return queries.searchWeaponByName(displayName).executeAsOne().toWeapon()
+        return queries.searchWeaponByName(displayName).executeAsOne().toWeapon()
     }
 
+    //Weapon(no skins)
     override suspend fun getWeaponByUUID(uuid: String): Weapon? {
-       return queries.getWeapon(uuid).executeAsOne().toWeapon()
+        return queries.getWeapon(uuid).executeAsOne().toWeapon()
     }
 
+    //Remove Weapon + Skins
     override suspend fun removeWeaponByUUID(uuid: String) {
-       return queries.removeWeapon(uuid)
-    }
-
-    override suspend fun insertSkin(skin: Skin) {
-        TODO("Not yet implemented")
+        val weapon = queries.getWeapon(uuid).executeAsOne().toWeapon()
+        //remove data from weapon table
+        return queries.removeWeapon(uuid).also {
+            //remove data from skins table
+            queries.removeAllSkinsForWeapon(uuid)
+            weapon.skins.forEach { skin ->
+                //remove data from chroma and level table
+                queries.removeAllChromasForSkin(skin.uuid)
+                queries.removeAllLevelsForSkin(skin.uuid)
+            }
+        }
     }
 
     override suspend fun getSkinsForWeapon(weaponUuid: String): List<Skin> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeAllSkinsForWeapon(weaponUuid: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeSkin(uuid: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertLevel(level: Level) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getLevelsForSkin(skinUuid: String): List<Level> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeAllLevelsForSkin(skinUuid: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeLevel(uuid: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertChroma(chroma: Chroma) {
-        TODO("Not yet implemented")
+        return queries.getSkins(weaponUuid).executeAsList().map { it.toSkin() }
     }
 
     override suspend fun getChromasForSkin(skinUuid: String): List<Chroma> {
-        TODO("Not yet implemented")
+        return queries.getChromas(skinUuid).executeAsList().map { it.toChroma() }
     }
 
-    override suspend fun removeAllChromaForSkin(skinUuid: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeChroma(uuid: String) {
-        TODO("Not yet implemented")
+    override suspend fun getLevelsForSkin(skinUuid: String): List<Level> {
+        return queries.getLevels(skinUuid).executeAsList().map { it.toLevel() }
     }
 
 

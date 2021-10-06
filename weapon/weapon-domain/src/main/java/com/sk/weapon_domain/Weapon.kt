@@ -12,8 +12,8 @@ data class Weapon(
     val displayIcon: String,
     val killStreamIcon: String,
     val weaponStats: WeaponStats?,
-    val shopData : ShopData,
-    val skins : List<Skin>
+    val shopData : ShopData?,
+    var skins : List<Skin>
 
     //altShotgunStats,airBurstStats,damageRanges,skins left
 

@@ -6,7 +6,6 @@ import com.sk.core.domain.UIComponent
 import com.sk.weapon_datasource.cache.WeaponCache
 import com.sk.weapon_datasource.network.WeaponService
 import com.sk.weapon_domain.Weapon
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -20,8 +19,6 @@ class GetWeapons(
             emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
 
             val weapons: List<Weapon> = try {
-
-                delay(1000)     //just to show loading
 
                 service.getWeaponStats()
             } catch (e: Exception) {
@@ -39,7 +36,7 @@ class GetWeapons(
 
             //insert into the cache
             //then read the cache and display the results ( single source of truth)
-            cache.insert(weapons)
+            cache.insertWeapons(weapons)
             val cachedData = cache.getAllWeapons()
             emit(DataState.Data(cachedData))
 

@@ -1,6 +1,7 @@
 package com.sk.ui_weapondetail.di
 
 import com.sk.core.util.Logger
+import com.sk.weapon_interactors.GetSkinsFromCache
 import com.sk.weapon_interactors.GetWeaponFromCache
 import com.sk.weapon_interactors.WeaponInteractors
 import dagger.Module
@@ -20,6 +21,14 @@ object WeaponDetailModule {
         interactors: WeaponInteractors
     ): GetWeaponFromCache {
         return interactors.getWeaponsFromCache
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSkinsFromCache(
+        interactors: WeaponInteractors
+    ) : GetSkinsFromCache {
+        return interactors.getSkinsFromCache
     }
 
 //    @Provides

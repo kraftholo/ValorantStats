@@ -19,10 +19,10 @@ data class SkinDto(
     val themeUuid: String,
 
     @SerialName("contentTierUuid")
-    val contentTierUuid: String,
+    val contentTierUuid: String?,
 
     @SerialName("displayIcon")
-    val displayIcon: String,
+    val displayIcon: String?,
 
     @SerialName("chromas")
     val chromas: List<ChromaDto>,
