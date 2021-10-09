@@ -38,12 +38,12 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.WeaponList.route,
                     builder = {
                         //This will add the two destinations to my navigation graph
-                        addWeaponList(
+                        addWeaponDetail(
                             route = Screen.WeaponDetail.route + "/{weaponUUID}",
                             Screen.WeaponDetail.arguments
                         )
 
-                        addWeaponDetail(
+                        addWeaponList(
                             route = Screen.WeaponList.route,
                             arguments = emptyList(),
                             navController = navController
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
 
 
     //Helper Extension functions to add destinations into the navigation graph
-    private fun NavGraphBuilder.addWeaponList(route: String, arguments: List<NamedNavArgument>) {
+    private fun NavGraphBuilder.addWeaponDetail(route: String, arguments: List<NamedNavArgument>) {
         return composable(
             route = route,                     //look at the Screen.WeaponDetail object
             arguments = arguments
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun NavGraphBuilder.addWeaponDetail(
+    private fun NavGraphBuilder.addWeaponList(
         route: String,
         arguments: List<NamedNavArgument>,
         navController: NavController

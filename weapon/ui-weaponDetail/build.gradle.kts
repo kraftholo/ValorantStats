@@ -9,6 +9,7 @@ dependencies {
     "implementation"(project(Modules.ui_weaponList))
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.weaponDomain))
+    "implementation"(Exoplayer.exoplayer)
 
     "implementation"(Coil.coil)
 }
