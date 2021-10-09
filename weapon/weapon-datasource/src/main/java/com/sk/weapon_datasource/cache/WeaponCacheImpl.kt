@@ -132,7 +132,13 @@ class WeaponCacheImpl(
     }
 
     override suspend fun getSkinsForWeapon(weaponUuid: String): List<Skin> {
-        return queries.getSkins(weaponUuid).executeAsList().map { it.toSkin() }
+        return queries.getSkins(weaponUuid).executeAsList().map {
+            it.toSkin().also { skin ->
+                skin.chromas = queries.getChromas(skin.uuid).executeAsList().map { it.toChroma() }
+                skin.levels = queries.getLevels(skin.uuid).executeAsList().map { it.toLevel() }
+            }
+
+        }
     }
 
     override suspend fun getChromasForSkin(skinUuid: String): List<Chroma> {
