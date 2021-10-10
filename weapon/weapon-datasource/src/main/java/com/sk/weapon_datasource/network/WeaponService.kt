@@ -1,6 +1,7 @@
 package com.sk.weapon_datasource.network
 
 import com.sk.weapon_domain.Weapon
+import com.sk.weapon_domain.skin.Skin
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -25,4 +26,5 @@ interface WeaponService {
 
     //Returning a List of Weapons and not WeaponDtos ( although we will get WeaponDtos from request first)
     suspend fun getWeaponStats(): List<Weapon>
+    suspend fun getSkins(weaponName:String): List<Skin>
 }

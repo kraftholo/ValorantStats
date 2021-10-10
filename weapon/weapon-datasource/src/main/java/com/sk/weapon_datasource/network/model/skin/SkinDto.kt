@@ -36,27 +36,14 @@ data class SkinDto(
     }
 }
 
-fun SkinDto.toChromas(): List<Chroma> {
-    return chromas.map { chromaDto ->
-        Chroma(
-            uuid = chromaDto.uuid,
-            displayName = chromaDto.displayName,
-            displayIcon = chromaDto.displayIcon,
-            fullRender = chromaDto.fullRender,
-            swatch = chromaDto.swatch,
-            streamedVideo = chromaDto.streamedVideo
-        )
-    }
-
-}
-
-fun SkinDto.toLevels(): List<Level> {
-    return levels.map { levelDto ->
-        Level(
-            uuid = levelDto.uuid,
-            displayName = levelDto.displayName,
-            displayIcon = levelDto.displayIcon,
-            streamedVideo = levelDto.streamedVideo
-        )
-    }
+fun SkinDto.toSkin(): Skin {
+    return Skin(
+        uuid,
+        displayName,
+        themeUuid,
+        contentTierUuid,
+        displayIcon,
+        chromas.map { it.toChroma() },
+        levels.map { it.toLevel() }
+    )
 }

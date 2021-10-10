@@ -24,6 +24,8 @@ interface WeaponCache {
     suspend fun getWeaponByUUID(uuid: String): Weapon?
     suspend fun removeWeaponByUUID(uuid: String)
 
+    suspend fun insertSkins(weaponUuid:String,skins: List<Skin>)
+
     suspend fun getSkinsForWeapon(weaponUuid: String): List<Skin>?
     suspend fun getLevelsForSkin(skinUuid: String): List<Level>
     suspend fun getChromasForSkin(skinUuid: String): List<Chroma>

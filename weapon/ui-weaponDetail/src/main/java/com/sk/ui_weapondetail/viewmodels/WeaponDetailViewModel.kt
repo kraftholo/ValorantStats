@@ -10,6 +10,7 @@ import com.sk.core.domain.DataState
 import com.sk.core.util.Logger
 import com.sk.ui_weapondetail.ui.WeaponDetailEvent
 import com.sk.ui_weapondetail.ui.WeaponDetailState
+import com.sk.weapon_interactors.GetSkins
 import com.sk.weapon_interactors.GetSkinsFromCache
 import com.sk.weapon_interactors.GetWeaponFromCache
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ class WeaponDetailViewModel
 @Inject
 constructor(
     val getWeaponFromCache: GetWeaponFromCache,
-    val getSkinsFromCache: GetSkinsFromCache,
+    val getSkins: GetSkins,
     val savedStateHandle: SavedStateHandle,
     //val logger: Logger
 ) : ViewModel() {
@@ -35,9 +36,7 @@ constructor(
         savedStateHandle.get<String>("weaponUUID")
             ?.let {
                 onTriggerEvent(WeaponDetailEvent.GetCachedWeapon(it))
-                onTriggerEvent(WeaponDetailEvent.GetCachedSkins(it))
             }
-
     }
 
     fun onTriggerEvent(event: WeaponDetailEvent) {
@@ -46,23 +45,23 @@ constructor(
                 getWeaponFromCache(event.weaponUUID)
             }
 
-            is WeaponDetailEvent.GetCachedSkins -> {
-                getSkinsFromCache(event.weaponUUID)
+            is WeaponDetailEvent.GetSkins -> {
+                getSkins(event.weaponUUID, event.weaponName)
             }
         }
     }
 
-    private fun getSkinsFromCache(weaponUuid : String){
-        //logger.log("getSkinsFromCache() : weaponUUID = $weaponUUID")
-        getSkinsFromCache.execute(weaponUuid).onEach { dataState ->
-            when(dataState){
+    private fun getSkins(weaponUuid: String, weaponName: String) {
+        //logger.log("getSkins() : weaponUUID = $weaponUUID")
+        getSkins.execute(weaponUuid, weaponName).onEach { dataState ->
+            when (dataState) {
                 is DataState.Loading -> {
                     state.value = state.value.copy(progressBarState = dataState.progressBarState)
                 }
 
                 is DataState.Data -> {
                     state.value = state.value.copy(skins = dataState.data)
-                    Log.d("getSkinsFromCache()","skins = ${state.value.skins}")
+                    Log.d("getSkins()", "skins = ${state.value.skins}")
                 }
 
                 is DataState.Response -> {
@@ -83,7 +82,10 @@ constructor(
 
                 is DataState.Data -> {
                     state.value = state.value.copy(weapon = dataState.data)
-                    Log.d("getWeaponFromCache()","weapon = ${state.value.weapon}")
+                    Log.d("getWeaponFromCache()", "weapon = ${state.value.weapon}")
+                    state.value.weapon?.let {
+                        onTriggerEvent(WeaponDetailEvent.GetSkins(it.UUID, it.displayName))
+                    }
                 }
 
                 is DataState.Response -> {

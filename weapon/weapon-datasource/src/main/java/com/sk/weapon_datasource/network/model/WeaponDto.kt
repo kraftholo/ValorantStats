@@ -1,8 +1,6 @@
 package com.sk.weapon_datasource.network.model
 
-import com.sk.weapon_datasource.network.model.skin.SkinDto
-import com.sk.weapon_datasource.network.model.skin.toChromas
-import com.sk.weapon_datasource.network.model.skin.toLevels
+import com.sk.weapon_datasource.network.model.skin.*
 import com.sk.weapon_datasource.network.model.stats.WeaponStatsDto
 import com.sk.weapon_datasource.network.model.stats.toWeaponStats
 import com.sk.weapon_domain.Weapon
@@ -56,8 +54,8 @@ fun WeaponDto.getSkins(): List<Skin> {
             themeUuid = skinDto.themeUuid,
             contentTierUuid = skinDto.contentTierUuid,
             displayIcon = skinDto.displayIcon,
-            chromas = skinDto.toChromas(),
-            levels = skinDto.toLevels()
+            chromas = skinDto.chromas.map { it.toChroma() },
+            levels = skinDto.levels.map { it.toLevel() }
         )
     }
 }

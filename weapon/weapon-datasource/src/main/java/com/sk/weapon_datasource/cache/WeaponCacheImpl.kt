@@ -21,12 +21,12 @@ class WeaponCacheImpl(
         }
     }
 
-    //gets weapons BUT no Skins
+    //gets weapons (NO SKINS)
     override suspend fun getAllWeapons(): List<Weapon> {
         return queries.selectAllWeapons().executeAsList().map { it.toWeapon() }
     }
 
-    //inserts all Weapons+Skins
+    //inserts all Weapons (NO SKINS)
     override suspend fun insertWeapon(weapon: Weapon) {
         return weapon.run {
             queries.insertWeapon(
@@ -62,56 +62,58 @@ class WeaponCacheImpl(
                 burstCountADS = weaponStats?.adsStats?.burstCount?.toLong(),
                 shopDataCost = shopData?.cost?.toLong() ?: 0
             )
+        }
+    }
 
-            //Insert Skins
-            skins.forEach { skin ->
-                queries.insertSkin(
-                    weaponUUID = this.UUID,
-                    uuid = skin.uuid,
-                    displayName = skin.displayName,
-                    themeUuid = skin.themeUuid,
-                    contentTierUuid = skin.contentTierUuid,
-                    displayIcon = skin.displayIcon ?: ""
+    override suspend fun insertSkins(weaponUuid: String, skins: List<Skin>) {
+        //Insert Skins
+        skins.forEach { skin ->
+            queries.insertSkin(
+                weaponUUID = weaponUuid,
+                uuid = skin.uuid,
+                displayName = skin.displayName,
+                themeUuid = skin.themeUuid,
+                contentTierUuid = skin.contentTierUuid,
+                displayIcon = skin.displayIcon ?: ""
+            )
+
+            //Insert Chromas
+            skin.chromas.forEach { chroma ->
+                queries.insertChroma(
+                    skinUUID = skin.uuid,
+                    uuid = chroma.uuid,
+                    displayName = chroma.displayName,
+                    displayIcon = chroma.displayIcon ?: "",
+                    fullRender = chroma.fullRender,
+                    swatch = chroma.swatch,
+                    streamedVideo = chroma.streamedVideo
                 )
+            }
 
-                //Insert Chromas
-                skin.chromas.forEach { chroma ->
-                    queries.insertChroma(
-                        skinUUID = skin.uuid,
-                        uuid = chroma.uuid,
-                        displayName = chroma.displayName,
-                        displayIcon = chroma.displayIcon ?: "",
-                        fullRender = chroma.fullRender,
-                        swatch = chroma.swatch,
-                        streamedVideo = chroma.streamedVideo
-                    )
-                }
-
-                //Insert Levels
-                skin.levels.forEach { level ->
-                    queries.insertLevel(
-                        skinUUID = skin.uuid,
-                        uuid = level.uuid,
-                        displayName = level.displayName ?: "",
-                        displayIcon = level.displayIcon ?: "",
-                        streamedVideo = level.streamedVideo
-                    )
-                }
+            //Insert Levels
+            skin.levels.forEach { level ->
+                queries.insertLevel(
+                    skinUUID = skin.uuid,
+                    uuid = level.uuid,
+                    displayName = level.displayName ?: "",
+                    displayIcon = level.displayIcon ?: "",
+                    streamedVideo = level.streamedVideo
+                )
             }
         }
     }
 
-    //Weapons( no skins)
+    //Weapons(NO SKINS)
     override suspend fun getWeaponsByCategory(category: String): List<Weapon> {
         return queries.searchWeaponByCategory(category).executeAsList().map { it.toWeapon() }
     }
 
-    //Weapon(no skins)
+    //Weapon(NO SKINS)
     override suspend fun getWeaponByName(displayName: String): Weapon {
         return queries.searchWeaponByName(displayName).executeAsOne().toWeapon()
     }
 
-    //Weapon(no skins)
+    //Weapon(NO SKINS)
     override suspend fun getWeaponByUUID(uuid: String): Weapon? {
         return queries.getWeapon(uuid).executeAsOne().toWeapon()
     }
@@ -135,7 +137,7 @@ class WeaponCacheImpl(
         return queries.getSkins(weaponUuid).executeAsList().map {
             it.toSkin().also { skin ->
                 skin.chromas = queries.getChromas(skin.uuid).executeAsList().map { it.toChroma() }
-                skin.levels = queries.getLevels(skin.uuid).executeAsList().map { it.toLevel() }
+               // skin.levels = queries.getLevels(skin.uuid).executeAsList().map { it.toLevel() }
             }
 
         }
