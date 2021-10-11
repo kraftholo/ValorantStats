@@ -8,7 +8,9 @@ import com.squareup.sqldelight.db.SqlDriver
 class WeaponInteractors(
     val getWeapons: GetWeapons,
     val getWeaponsFromCache: GetWeaponFromCache,
-    val getSkins: GetSkins
+    val getSkins: GetSkins,
+    val getSkinFromCache: GetSkinFromCache,
+    val getLevelsFromCache: GetLevelsFromCache
 ) {
 
     // viewmodel will not know how it is actually implemented inside
@@ -28,6 +30,12 @@ class WeaponInteractors(
                 getSkins = GetSkins(
                     service = service,
                     cache = WeaponCache.build(sqlDriver)
+                ),
+                getSkinFromCache = GetSkinFromCache(
+                    WeaponCache.build(sqlDriver)
+                ),
+                getLevelsFromCache = GetLevelsFromCache(
+                    WeaponCache.build(sqlDriver)
                 )
             )
         }

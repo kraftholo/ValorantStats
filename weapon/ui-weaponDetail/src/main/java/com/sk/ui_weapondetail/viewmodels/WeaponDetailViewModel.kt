@@ -7,11 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sk.core.domain.DataState
-import com.sk.core.util.Logger
-import com.sk.ui_weapondetail.ui.WeaponDetailEvent
-import com.sk.ui_weapondetail.ui.WeaponDetailState
+import com.sk.ui_weapondetail.ui.detail.WeaponDetailEvent
+import com.sk.ui_weapondetail.ui.detail.WeaponDetailState
 import com.sk.weapon_interactors.GetSkins
-import com.sk.weapon_interactors.GetSkinsFromCache
 import com.sk.weapon_interactors.GetWeaponFromCache
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

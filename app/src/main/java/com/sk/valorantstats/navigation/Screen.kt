@@ -17,7 +17,14 @@ sealed class Screen(
 
     object WeaponDetail : Screen(
         route = "weapon_detail",
-        arguments = listOf(navArgument("weaponUUID"){
+        arguments = listOf(navArgument("weaponUUID") {
+            type = NavType.StringType
+        })
+    )
+
+    object WeaponSkinDetail : Screen(
+        route = "weapon_skin",
+        arguments = listOf(navArgument("weaponSkinUUID") {
             type = NavType.StringType
         })
     )

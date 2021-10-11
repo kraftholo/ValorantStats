@@ -1,4 +1,4 @@
-package com.sk.ui_weapondetail.ui
+package com.sk.ui_weapondetail.ui.detail
 
 sealed class WeaponDetailEvent {
 

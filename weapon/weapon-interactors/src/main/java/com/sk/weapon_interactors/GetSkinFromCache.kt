@@ -8,21 +8,20 @@ import com.sk.weapon_domain.skin.Skin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetSkinsFromCache(
+class GetSkinFromCache(
     val cache: WeaponCache
 ) {
 
-    fun execute(weaponUUID: String): Flow<DataState<List<Skin>>> = flow {
+    fun execute(weaponSkinUUID: String): Flow<DataState<Skin>> = flow {
         try {
             emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
 
-            val cachedSkins = cache.getSkinsForWeapon(weaponUUID)
-                ?: throw Exception("Weapon Skins not present in Cache!")
+            val cachedSkins = cache.getSkinByUUID(weaponSkinUUID)
             emit(DataState.Data(data = cachedSkins))
         } catch (e: Exception) {
             e.printStackTrace()
             emit(
-                DataState.Response<List<Skin>>(
+                DataState.Response<Skin>(
                     uiComponent = UIComponent.Dialog(
                         title = "Caching Error",
                         description = e.message ?: "Unknown"

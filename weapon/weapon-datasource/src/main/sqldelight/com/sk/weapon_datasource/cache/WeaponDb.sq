@@ -131,6 +131,10 @@ INTO skin_Entity(
     displayIcon
 ) VALUES (?,?,?,?,?,?);
 
+getSkin:
+SELECT * FROM skin_Entity
+WHERE uuid = :skinUUID;
+
 getSkins:
 SELECT * FROM skin_Entity
 WHERE weaponUUID = :weaponUUID;
