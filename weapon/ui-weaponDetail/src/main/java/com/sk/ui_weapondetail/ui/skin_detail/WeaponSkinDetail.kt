@@ -1,9 +1,8 @@
 package com.sk.ui_weapondetail.ui.skin_detail
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import android.util.Log
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -37,18 +36,45 @@ fun WeaponSkinDetail(
 ) {
     Column {
         state.skin?.let {
-            Text( modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(end = 8.dp),
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(end = 8.dp),
                 text = it.displayName,
-                style = MaterialTheme.typography.h1)
+                style = MaterialTheme.typography.h1
+            )
             ChromaDisplay(chromaList = it.chromas, imageLoader = imageLoader)
         }
 
         state.levels?.let {
-            LevelDisplay(levelList = it, imageLoader = imageLoader)
+            //LevelDisplay(levelList = it, imageLoader = imageLoader)
+            LevelDisplay2(levelList = it)
         }
     }
+
+}
+
+@Composable
+fun LevelDisplay2(levelList: List<Level>) {
+    val context = LocalContext.current
+    val exoPLayer = SimpleExoPlayer.Builder(context).build()
+    val playerView = PlayerView(context)
+
+    levelList[0].streamedVideo?.let {
+        val mediaItem = MediaItem.fromUri(it)
+        exoPLayer.setMediaItem(mediaItem)
+        playerView.player = exoPLayer
+    }
+    LaunchedEffect(exoPLayer) {
+        exoPLayer.apply {
+                prepare()
+                playWhenReady = true
+            }
+    }
+
+    AndroidView(factory = {
+        playerView
+    })
 
 }
 
@@ -94,25 +120,38 @@ fun LevelDisplay(levelList: List<Level>, imageLoader: ImageLoader) {
     updateCurrentlyPlayingItem(exoPlayer = exoPlayer, level = currentlyPlayingItem)
 
 
-    LazyRow(state = listState) {
-        items(levelList) {
-
-                AndroidView(factory = { context ->
-                    PlayerView(context).apply {
-                        player = exoPlayer
-                    }
-                })
-
-        }
-
+    //LazyRow(state = listState) {
+    // items(levelList) {
+    Box {
+        AndroidView(
+            factory = { context ->
+                PlayerView(context).apply {
+                    player = exoPlayer
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 200.dp)
+        )
     }
+
 }
+
+// }
+//}
 
 @Composable
 private fun determineCurrentlyPLayingItem(listState: LazyListState, items: List<Level>): Level? {
+    Log.d("itemsForCurPlayItem", "items = $items")
     val layoutInfo = listState.layoutInfo
-    val visibleLevels = layoutInfo.visibleItemsInfo.map { items[it.index] }
-    val levelsWithVideo = visibleLevels.filter { it.streamedVideo != null }
+    //val visibleLevels = layoutInfo.visibleItemsInfo.map { items[it.index] }
+    val levelsWithVideo = items.filter { !it.streamedVideo.isNullOrBlank() }
+    return if (levelsWithVideo.size == 1) {
+        levelsWithVideo.first()
+    } else {
+        null
+    }
+
     return if (levelsWithVideo.size == 1) {
         levelsWithVideo.first()
     } else {
