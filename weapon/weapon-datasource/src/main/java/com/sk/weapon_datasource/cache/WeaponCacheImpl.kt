@@ -3,6 +3,7 @@ package com.sk.weapon_datasource.cache
 import com.sk.weapon_domain.Weapon
 import com.sk.weapon_domain.skin.Chroma
 import com.sk.weapon_domain.skin.Level
+import com.sk.weapon_domain.skin.LevelItemType
 import com.sk.weapon_domain.skin.Skin
 
 class WeaponCacheImpl(
@@ -75,7 +76,7 @@ class WeaponCacheImpl(
                 themeUuid = skin.themeUuid,
                 contentTierUuid = skin.contentTierUuid,
                 displayIcon = skin.displayIcon ?: "",
-                hasLevels = if (skin.levels.size>1) 1 else 0
+                hasLevels = if (skin.levels.size > 1) 1 else 0
             )
 
             //Insert Chromas
@@ -93,12 +94,31 @@ class WeaponCacheImpl(
 
             //Insert Levels
             skin.levels.forEach { level ->
+                var hasVFX = 0;
+                var hasAnimation = 0;
+                var hasFinisher = 0;
+                var hasKillCounter = 0;
+                level.levelItemType?.let {
+                    when (it) {
+                        is LevelItemType.VFX -> hasVFX = 1;
+                        is LevelItemType.Animation -> hasAnimation = 1;
+                        is LevelItemType.Finisher -> hasFinisher = 1;
+                        is LevelItemType.KillCounter -> hasKillCounter = 1;
+
+                        else -> {
+                        }
+                    }
+                }
                 queries.insertLevel(
                     skinUUID = skin.uuid,
                     uuid = level.uuid,
                     displayName = level.displayName ?: "",
                     displayIcon = level.displayIcon ?: "",
-                    streamedVideo = level.streamedVideo
+                    streamedVideo = level.streamedVideo,
+                    hasVFX = hasVFX.toLong(),
+                    hasAnimation = hasAnimation.toLong(),
+                    hasFinisher = hasFinisher.toLong(),
+                    hasKillCounter = hasKillCounter.toLong()
                 )
             }
         }
@@ -144,7 +164,6 @@ class WeaponCacheImpl(
         return queries.getSkins(weaponUuid).executeAsList().map {
             it.toSkin().also { skin ->
                 skin.chromas = queries.getChromas(skin.uuid).executeAsList().map { it.toChroma() }
-               // skin.levels = queries.getLevels(skin.uuid).executeAsList().map { it.toLevel() }
             }
 
         }

@@ -3,6 +3,7 @@ package com.sk.weapon_datasource.cache
 import com.sk.weapon_domain.*
 import com.sk.weapon_domain.skin.Chroma
 import com.sk.weapon_domain.skin.Level
+import com.sk.weapon_domain.skin.LevelItemType
 import com.sk.weapon_domain.skin.Skin
 import com.sk.weapon_domain.stats.*
 import com.sk.weapondatasource.cache.Chroma_Entity
@@ -10,9 +11,12 @@ import com.sk.weapondatasource.cache.Level_Entity
 import com.sk.weapondatasource.cache.Skin_Entity
 import com.sk.weapondatasource.cache.Weapon_Entity
 
+
 fun Weapon_Entity.toWeapon(): Weapon {
     var weaponStats: WeaponStats? = null
     var weaponADSStats: WeaponADSStats? = null
+
+
 
     hasADSStats?.let {
         if (it.toInt() == 1) {
@@ -81,11 +85,21 @@ fun Chroma_Entity.toChroma(): Chroma {
     )
 }
 
+
+fun Level_Entity.getItemType(): LevelItemType {
+    if (hasVFX?.toInt() == 1) return LevelItemType.VFX
+    if (hasAnimation?.toInt() == 1) return LevelItemType.Animation
+    if (hasFinisher?.toInt() == 1) return LevelItemType.Finisher
+    if (hasKillCounter?.toInt() == 1) return LevelItemType.KillCounter
+    return LevelItemType.Unknown
+}
+
 fun Level_Entity.toLevel(): Level {
     return Level(
         uuid = uuid,
         displayName = displayName,
         displayIcon = displayIcon,
-        streamedVideo = streamedVideo
+        streamedVideo = streamedVideo,
+        levelItemType = getItemType()
     )
 }

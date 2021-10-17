@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -28,12 +29,22 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.sk.ui_weapondetail.ui.composable.ChromaDisplay
 import com.sk.weapon_domain.skin.Level
+import com.sk.weapon_domain.skin.LevelItemType
 
 @Composable
 fun WeaponSkinDetail(
     state: WeaponSkinDetailState,
     imageLoader: ImageLoader
 ) {
+
+    val streamedVideo = remember {
+        mutableStateOf("")
+    }
+
+    val context = LocalContext.current
+    val exoPLayer = SimpleExoPlayer.Builder(context).build()
+    val playerView = PlayerView(context)
+
     Column {
         state.skin?.let {
             Text(
@@ -46,35 +57,97 @@ fun WeaponSkinDetail(
             ChromaDisplay(chromaList = it.chromas, imageLoader = imageLoader)
         }
 
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+
+        ) {
+            state.levels?.forEach { level ->
+                when (level.levelItemType) {
+                    is LevelItemType.VFX -> {
+                        Button(onClick = {
+                            //check should always pass
+                            level.streamedVideo?.let {
+                                streamedVideo.value = it
+                            }
+                        }) {
+                            Text(text = LevelItemType.VFX.uiValue)
+                        }
+                    }
+                    is LevelItemType.Animation -> {
+                        Button(onClick = {
+                            //check should always pass
+                            level.streamedVideo?.let {
+                                streamedVideo.value = it
+                            }
+                        }) {
+                            Text(text = LevelItemType.Animation.uiValue)
+                        }
+
+                    }
+                    is LevelItemType.Finisher -> {
+                        Button(onClick = {
+                            //check should always pass
+                            level.streamedVideo?.let {
+                                streamedVideo.value = it
+                            }
+                        }) {
+                            Text(text = LevelItemType.Finisher.uiValue)
+                        }
+
+                    }
+                    is LevelItemType.KillCounter -> {
+                        Button(onClick = {
+                            //check should always pass
+                            level.streamedVideo?.let {
+                                streamedVideo.value = it
+                            }
+                        }) {
+                            Text(text = LevelItemType.KillCounter.uiValue)
+                        }
+
+                    }
+
+                    else -> {
+                        //Do nothing
+                    }
+                }
+            }
+        }
+
+
         state.levels?.let {
             //LevelDisplay(levelList = it, imageLoader = imageLoader)
-            LevelDisplay2(levelList = it)
+            AndroidView(factory = {
+                playerView
+            })
+            LevelDisplay2(levelList = it, streamedVideo.value,exoPLayer,playerView)
         }
     }
 
 }
 
 @Composable
-fun LevelDisplay2(levelList: List<Level>) {
-    val context = LocalContext.current
-    val exoPLayer = SimpleExoPlayer.Builder(context).build()
-    val playerView = PlayerView(context)
+fun LevelDisplay2(levelList: List<Level>, streamedVideo: String, exoPLayer: SimpleExoPlayer, playerView : PlayerView) {
+    println("shobhit: leveldisplay2 recomposing!!!!")
 
-    levelList[0].streamedVideo?.let {
-        val mediaItem = MediaItem.fromUri(it)
-        exoPLayer.setMediaItem(mediaItem)
-        playerView.player = exoPLayer
-    }
-    LaunchedEffect(exoPLayer) {
-        exoPLayer.apply {
+    if(streamedVideo.isNotEmpty()){
+        exoPLayer.setMediaItem(MediaItem.fromUri(streamedVideo))
+
+        LaunchedEffect(exoPLayer) {
+            exoPLayer.apply {
                 prepare()
                 playWhenReady = true
+                playerView.player = exoPLayer
             }
+        }
     }
 
-    AndroidView(factory = {
-        playerView
-    })
+
+
 
 }
 

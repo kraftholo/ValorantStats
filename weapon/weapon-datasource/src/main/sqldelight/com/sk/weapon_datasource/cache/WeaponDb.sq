@@ -62,7 +62,12 @@ CREATE TABLE level_Entity (
     uuid TEXT NOT NULL PRIMARY KEY,
     displayName TEXT NOT NULL,
     displayIcon TEXT NOT NULL,
-    streamedVideo TEXT DEFAULT NULL
+    streamedVideo TEXT DEFAULT NULL,
+
+    hasVFX INTEGER DEFAULT 0,
+    hasAnimation INTEGER DEFAULT 0,
+    hasFinisher INTEGER DEFAULT 0,
+    hasKillCounter INTEGER DEFAULT 0
 );
 
 
@@ -155,8 +160,12 @@ INTO level_Entity(
     uuid,
     displayName,
     displayIcon,
-    streamedVideo
-) VALUES (?,?,?,?,?);
+    streamedVideo,
+    hasVFX,
+    hasAnimation,
+    hasFinisher,
+    hasKillCounter
+) VALUES (?,?,?,?,?,?,?,?,?);
 
 getLevels:
 SELECT * FROM level_Entity
