@@ -47,6 +47,6 @@ fun SkinDto.toSkin(): Skin {
         displayIcon,
         chromas.map { it.toChroma() },
         levels.map { it.toLevel() },
-        hasLevels = levels.size > 1 .apply { println("shobhit: hasLevels = ${levels.size}") }
+        hasLevels = levels.size > 1
     )
 }

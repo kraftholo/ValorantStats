@@ -7,9 +7,10 @@ data class Skin(
     val contentTierUuid: String?,
     val displayIcon: String?,
     var chromas: List<Chroma>,
-    var levels: List<Level>
+    var levels: List<Level>,
+    var hasLevels : Boolean
 ) {
     override fun toString(): String {
-        return "Skin(uuid='$uuid', displayName='$displayName', themeUuid='$themeUuid', contentTierUuid=$contentTierUuid, displayIcon='$displayIcon', chromas=$chromas, levels=$levels)"
+        return "Skin(uuid='$uuid', displayName='$displayName', themeUuid='$themeUuid', contentTierUuid=$contentTierUuid, displayIcon=$displayIcon, chromas=$chromas, levels=$levels, hasLevels=$hasLevels)"
     }
 }
