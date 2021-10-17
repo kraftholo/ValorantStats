@@ -1,10 +1,9 @@
 package com.sk.weapon_datasource.network.model.skin
 
-import com.sk.weapon_domain.skin.Chroma
-import com.sk.weapon_domain.skin.Level
 import com.sk.weapon_domain.skin.Skin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class SkinDto(
@@ -30,9 +29,12 @@ data class SkinDto(
     @SerialName("levels")
     val levels: List<LevelDto>,
 
+    @Transient
+    val hasLevels : Boolean = false
+
     ) {
     override fun toString(): String {
-        return "SkinDto(uuid='$uuid', displayName='$displayName', themeUuid='$themeUuid', contentTierUuid='$contentTierUuid', displayIcon='$displayIcon', chromas=$chromas, levels=$levels)"
+        return "SkinDto(uuid='$uuid', displayName='$displayName', themeUuid='$themeUuid', contentTierUuid=$contentTierUuid, displayIcon=$displayIcon, chromas=$chromas, levels=$levels, hasLevels=$hasLevels)"
     }
 }
 
@@ -44,6 +46,7 @@ fun SkinDto.toSkin(): Skin {
         contentTierUuid,
         displayIcon,
         chromas.map { it.toChroma() },
-        levels.map { it.toLevel() }
+        levels.map { it.toLevel() },
+        hasLevels = levels.size > 1 .apply { println("shobhit: hasLevels = ${levels.size}") }
     )
 }

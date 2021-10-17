@@ -116,7 +116,7 @@ fun WeaponDetail(
                         }
                     }
                     state.skins?.forEach {
-                        WeaponSkinCollection(it, imageLoader = imageLoader,onSelectSkin)
+                        WeaponSkinCollection(it, imageLoader = imageLoader, onSelectSkin)
                     }
                 }
             }
@@ -158,10 +158,13 @@ fun WeaponSkinCollection(
         text = skin.displayName
     )
     ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader)
-    Button(onClick = { onSelectSkin(skin.uuid) }) {
-        Text("Show Skin Levels")
+    if (skin.hasLevels) {
+        Button(onClick = { onSelectSkin(skin.uuid) }) {
+            Text("Show Skin Levels")
+        }
     }
 }
+
 
 
 

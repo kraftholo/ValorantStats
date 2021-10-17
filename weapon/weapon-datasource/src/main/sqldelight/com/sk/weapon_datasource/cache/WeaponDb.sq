@@ -43,7 +43,8 @@ CREATE TABLE skin_Entity(
     displayName TEXT NOT NULL,
     themeUuid TEXT NOT NULL,
     contentTierUuid TEXT DEFAULT NULL,
-    displayIcon TEXT NOT NULL
+    displayIcon TEXT NOT NULL,
+    hasLevels INTEGER DEFAULT 0
 );
 
 CREATE TABLE chroma_Entity (
@@ -100,6 +101,7 @@ INTO weapon_Entity(
 	firstBulletAccuracyADS,
 
 	shopDataCost
+
 	
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
@@ -128,8 +130,9 @@ INTO skin_Entity(
     displayName,
     themeUuid,
     contentTierUuid,
-    displayIcon
-) VALUES (?,?,?,?,?,?);
+    displayIcon,
+    hasLevels
+) VALUES (?,?,?,?,?,?,?);
 
 getSkin:
 SELECT * FROM skin_Entity

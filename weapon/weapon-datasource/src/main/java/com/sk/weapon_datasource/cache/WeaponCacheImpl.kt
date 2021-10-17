@@ -74,7 +74,8 @@ class WeaponCacheImpl(
                 displayName = skin.displayName,
                 themeUuid = skin.themeUuid,
                 contentTierUuid = skin.contentTierUuid,
-                displayIcon = skin.displayIcon ?: ""
+                displayIcon = skin.displayIcon ?: "",
+                hasLevels = if (skin.levels.size>1) 1 else 0
             )
 
             //Insert Chromas

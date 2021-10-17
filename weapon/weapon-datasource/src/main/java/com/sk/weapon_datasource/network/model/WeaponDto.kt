@@ -55,7 +55,8 @@ fun WeaponDto.getSkins(): List<Skin> {
             contentTierUuid = skinDto.contentTierUuid,
             displayIcon = skinDto.displayIcon,
             chromas = skinDto.chromas.map { it.toChroma() },
-            levels = skinDto.levels.map { it.toLevel() }
+            levels = skinDto.levels.map { it.toLevel() },
+            hasLevels = skinDto.hasLevels
         )
     }
 }

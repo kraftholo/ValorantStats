@@ -65,7 +65,8 @@ fun Skin_Entity.toSkin(): Skin {
         contentTierUuid = contentTierUuid,
         displayIcon = displayIcon,
         chromas = listOf(),
-        levels = listOf()
+        levels = listOf(),
+        hasLevels = hasLevels?.toInt() == 1
     )
 }
 
