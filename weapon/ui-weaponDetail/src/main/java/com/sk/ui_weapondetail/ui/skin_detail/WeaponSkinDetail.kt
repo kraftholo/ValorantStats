@@ -1,12 +1,7 @@
 package com.sk.ui_weapondetail.ui.skin_detail
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,7 +16,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
@@ -36,7 +30,6 @@ fun WeaponSkinDetail(
     state: WeaponSkinDetailState,
     imageLoader: ImageLoader
 ) {
-
 
     val context = LocalContext.current
     val exoPlayer = remember {
@@ -80,7 +73,7 @@ fun WeaponSkinDetail(
                 text = it.displayName,
                 style = MaterialTheme.typography.h1
             )
-            ChromaDisplay(chromaList = it.chromas, imageLoader = imageLoader)
+            ChromaDisplay(chromaList = it.chromas, imageLoader = imageLoader, true)
         }
 
         Row(
