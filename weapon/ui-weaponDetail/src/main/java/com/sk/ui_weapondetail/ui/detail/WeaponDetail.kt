@@ -157,7 +157,7 @@ fun WeaponSkinCollection(
         modifier = Modifier.fillMaxWidth(),
         text = skin.displayName
     )
-    ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader, false)
+    ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader)
     if (skin.hasLevels) {
         Button(onClick = { onSelectSkin(skin.uuid) }) {
             Text("Show Skin Levels")

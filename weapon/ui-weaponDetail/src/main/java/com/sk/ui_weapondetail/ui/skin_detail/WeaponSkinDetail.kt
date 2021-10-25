@@ -1,6 +1,7 @@
 package com.sk.ui_weapondetail.ui.skin_detail
 
 import android.net.Uri
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -21,10 +22,11 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.sk.ui_weapondetail.ui.composable.ChromaDisplay
+import com.sk.ui_weapondetail.ui.composable.ChromaDisplayWithVideo
 import com.sk.weapon_domain.skin.Level
 import com.sk.weapon_domain.skin.LevelItemType
 
+@ExperimentalAnimationApi
 @Composable
 fun WeaponSkinDetail(
     state: WeaponSkinDetailState,
@@ -73,7 +75,7 @@ fun WeaponSkinDetail(
                 text = it.displayName,
                 style = MaterialTheme.typography.h1
             )
-            ChromaDisplay(chromaList = it.chromas, imageLoader = imageLoader, true)
+            ChromaDisplayWithVideo(chromaList = it.chromas, imageLoader = imageLoader)
         }
 
         Row(
