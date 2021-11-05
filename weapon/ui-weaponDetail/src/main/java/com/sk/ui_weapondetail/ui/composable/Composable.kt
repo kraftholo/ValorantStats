@@ -3,7 +3,7 @@ package com.sk.ui_weapondetail.ui.composable
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.animateSizeAsState
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -14,15 +14,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -94,14 +97,17 @@ fun ChromaDisplayWithVideo(
     val context = LocalContext.current
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
 
-    val imageSize by animateSizeAsState(
-        targetValue =
-        if (isPlayerVisible.value) {
-            Size(150f, 100f)
-        } else {
-            Size(300f, 150f)
-        }
-    )
+    exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+
+    //Using transition to animate multiple values
+    val transition = updateTransition(targetState = isPlayerVisible.value)
+
+    val imageWidthF by transition.animateFloat() { playerIsVisible ->
+        if (playerIsVisible) 0.3f else 0.7f
+    }
+    val imageHeight by transition.animateDp() { playerIsVisible ->
+        if (playerIsVisible) 200.dp else 100.dp
+    }
 
     updateCurrentlyPlayingItem(
         exoPlayer = exoPlayer,
@@ -140,16 +146,16 @@ fun ChromaDisplayWithVideo(
         }
     )
 
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
+    Column {
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.fillMaxWidth()                      //This makes the Arrangement.SpaceAround work
         ) {
             Image(
                 modifier = Modifier
-                    .size(imageSize.width.dp, imageSize.height.dp)
+                    .fillMaxWidth(imageWidthF)
+                    .height(imageHeight)
                     .padding(8.dp),
                 painter = painter,
                 contentDescription = selectedChroma.value.displayName,
@@ -157,20 +163,20 @@ fun ChromaDisplayWithVideo(
             )
 
             AnimatedVisibility(visible = isPlayerVisible.value) {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .height(imageSize.height.dp),
-                    horizontalAlignment = Alignment.End
-                ) {
-
-                    AndroidView(factory = { context ->
+                AndroidView(
+                    factory = { context ->
                         PlayerView(context).apply {
+                            useController = false
+                            hideController()
+                            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                             player = exoPlayer
                         }
-                    }
-                    )
-                }
+                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(1.0f - imageWidthF)
+                        .height(imageHeight / 2f)
+                )
             }
         }
 

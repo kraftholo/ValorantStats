@@ -19,6 +19,7 @@ import coil.ImageLoader
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -132,7 +133,9 @@ fun WeaponSkinDetail(
             }
         }
 
-        Box {
+        Box(
+            modifier = Modifier.defaultMinSize(minHeight = 200.dp)
+        ) {
             AndroidView(
                 factory = { context ->
                     PlayerView(context).apply {
@@ -165,7 +168,6 @@ private fun updateCurrentlyPlayingItem(exoPlayer: SimpleExoPlayer, level: Level?
             } ?: stop()
         }
     }
-
 
 }
 
