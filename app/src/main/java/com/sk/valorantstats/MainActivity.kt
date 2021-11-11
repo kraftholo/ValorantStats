@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
                         addWeaponSkinDetail(
                             route = Screen.WeaponSkinDetail.route + "/{weaponSkinUUID}",
                             Screen.WeaponSkinDetail.arguments,
+                            navController = navController
                         )
                     }
                 )
@@ -78,9 +79,13 @@ class MainActivity : ComponentActivity() {
             arguments = arguments
         ) {
             val viewModel: WeaponDetailViewModel = hiltViewModel()
-            WeaponDetail(viewModel.state.value, imageLoader, onSelectSkin = { weaponSkinUuid ->
-                navController.navigate("${Screen.WeaponSkinDetail.route}/$weaponSkinUuid")
-            })
+            WeaponDetail(
+                viewModel.state.value,
+                imageLoader,
+                onSelectSkin = { weaponSkinUuid ->
+                    navController.navigate("${Screen.WeaponSkinDetail.route}/$weaponSkinUuid")
+                },
+                onBack = { navController.navigateUp() })
         }
     }
 
@@ -93,7 +98,9 @@ class MainActivity : ComponentActivity() {
             route = route
         ) {
             val viewModel: WeaponListViewModel = hiltViewModel()
-            WeaponList(viewModel.state.value, imageLoader,
+            WeaponList(
+                viewModel.state.value,
+                imageLoader,
                 navigateToDetailScreen = { weaponUUID ->
                     navController.navigate("${Screen.WeaponDetail.route}/$weaponUUID")
                 }
@@ -105,14 +112,18 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     private fun NavGraphBuilder.addWeaponSkinDetail(
         route: String,
-        arguments: List<NamedNavArgument>
+        arguments: List<NamedNavArgument>,
+        navController: NavController
     ) {
         return composable(
             route = route,
             arguments = arguments
         ) {
             val viewModel: WeaponSkinDetailViewModel = hiltViewModel()
-            WeaponSkinDetail(state = viewModel.state.value, imageLoader = imageLoader)
+            WeaponSkinDetail(
+                state = viewModel.state.value,
+                imageLoader = imageLoader,
+                onBack = { navController.navigateUp() })
         }
     }
 

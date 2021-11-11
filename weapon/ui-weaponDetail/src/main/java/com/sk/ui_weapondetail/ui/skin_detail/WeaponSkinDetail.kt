@@ -3,9 +3,9 @@ package com.sk.ui_weapondetail.ui.skin_detail
 import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +31,8 @@ import com.sk.weapon_domain.skin.LevelItemType
 @Composable
 fun WeaponSkinDetail(
     state: WeaponSkinDetailState,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    onBack : ()-> Unit
 ) {
 
     val context = LocalContext.current
@@ -41,7 +42,9 @@ fun WeaponSkinDetail(
 
     val lifecycleOwner by rememberUpdatedState(LocalLifecycleOwner.current)
     DisposableEffect(lifecycleOwner) {
-        val lifecycle = lifecycleOwner.lifecycle
+        val lifecycle = lifecycleOwner.
+
+        lifecycle
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
@@ -68,6 +71,14 @@ fun WeaponSkinDetail(
     updateCurrentlyPlayingItem(exoPlayer = exoPlayer, level = currentlyPlayingItem.value)
 
     Column {
+        TopAppBar(
+            title = { Text(text = "Skin Details") },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Rounded.ArrowBack,"")
+                }
+            }
+        )
         state.skin?.let {
             Text(
                 modifier = Modifier

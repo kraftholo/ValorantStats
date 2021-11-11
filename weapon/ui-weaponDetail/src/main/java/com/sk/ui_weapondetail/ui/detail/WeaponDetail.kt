@@ -4,9 +4,13 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
@@ -24,132 +28,151 @@ import com.sk.weapon_domain.skin.Skin
 fun WeaponDetail(
     state: WeaponDetailState,
     imageLoader: ImageLoader,
-    onSelectSkin: (String) -> Unit
+    onSelectSkin: (String) -> Unit,
+    onBack: () -> Unit
 ) {
-    Box {
-        state.weapon?.let { weapon ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background)
-            ) {
+    Column() {
+        TopAppBar(
+            title = { Text(text = state.weapon?.displayName ?: "") },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Rounded.ArrowBack, "")
+                }
+            }
+        )
+        Box {
+            state.weapon?.let { weapon ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colors.background)
+                ) {
 
 
-                item {
-                    Column {
-                        val painter = rememberImagePainter(
-                            weapon.displayIcon,
-                            imageLoader,
-                            builder = {
-                                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                            }
-                        )
+                    item {
+                        Column {
+                            val painter = rememberImagePainter(
+                                weapon.displayIcon,
+                                imageLoader,
+                                builder = {
+                                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                                }
+                            )
 
-                        Image(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .defaultMinSize(minHeight = 200.dp),
-                            painter = painter,
-                            contentDescription = weapon.displayName,
-                            contentScale = ContentScale.Fit
-                        )
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(12.dp)
-                        ) {
-
-                            Row(
+                            Image(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(bottom = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
+                                    .defaultMinSize(minHeight = 200.dp),
+                                painter = painter,
+                                contentDescription = weapon.displayName,
+                                contentScale = ContentScale.Fit
+                            )
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(12.dp)
                             ) {
+
                                 Row(
                                     modifier = Modifier
-                                        .align(Alignment.CenterVertically)
-                                        .weight(6f)
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start
                                 ) {
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(end = 8.dp),
-                                        text = weapon.displayName,
-                                        style = MaterialTheme.typography.h1
-                                    )
-                                    val iconPainter = rememberImagePainter(
-                                        weapon.killStreamIcon,
-                                        imageLoader = imageLoader,
-                                        builder = {
-                                            placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                                        }
-                                    )
-
-                                    Image(
-                                        modifier = Modifier
-                                            .height(40.dp)
-                                            .width(40.dp),
-                                        painter = iconPainter,
-                                        contentDescription = weapon.displayName,
-                                        contentScale = ContentScale.Fit
-                                    )
-                                }
-
-                                weapon.shopData?.let {
-                                    Text(
+                                    Row(
                                         modifier = Modifier
                                             .align(Alignment.CenterVertically)
-                                            .weight(2f),
-                                        text = it.cost.toString(),
-                                        style = MaterialTheme.typography.h2
-                                    )
+                                            .weight(6f)
+                                    ) {
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(end = 8.dp),
+                                            text = weapon.displayName,
+                                            style = MaterialTheme.typography.h1
+                                        )
+                                        val iconPainter = rememberImagePainter(
+                                            weapon.killStreamIcon,
+                                            imageLoader = imageLoader,
+                                            builder = {
+                                                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                                            }
+                                        )
+
+                                        Image(
+                                            modifier = Modifier
+                                                .height(40.dp)
+                                                .width(40.dp),
+                                            painter = iconPainter,
+                                            contentDescription = weapon.displayName,
+                                            contentScale = ContentScale.Fit
+                                        )
+                                    }
+
+                                    weapon.shopData?.let {
+                                        Text(
+                                            modifier = Modifier
+                                                .align(Alignment.CenterVertically)
+                                                .weight(2f),
+                                            text = it.cost.toString(),
+                                            style = MaterialTheme.typography.h2
+                                        )
+                                    }
                                 }
-                            }
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceAround,
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
-                                Text(
-                                    modifier = Modifier.padding(bottom = 4.dp,start = 4.dp),
-                                    text = weapon.category.uiValue,
-                                    style = MaterialTheme.typography.subtitle1
-                                )
-
-                                Text(
-                                    modifier = Modifier.padding(bottom = 4.dp, start = 8.dp),
-                                    text = weapon.weaponStats?.fireMode?.uiValue ?: "Unknown",
-                                    style = MaterialTheme.typography.subtitle1
-                                )
-                            }
-
-                            weapon.weaponStats?.let { weaponStats ->
                                 Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Start,
+                                    horizontalArrangement = Arrangement.SpaceAround,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        painterResource(id = R.drawable.wall_penetration),
-                                        "wall_penetration"
-                                    )
                                     Text(
-                                        modifier = Modifier.padding(bottom = 4.dp, start = 2.dp),
-                                        text = weaponStats.wallPenetration?.uiValue ?: "Unknown",
+                                        modifier = Modifier.padding(bottom = 4.dp, start = 4.dp),
+                                        text = weapon.category.uiValue,
+                                        style = MaterialTheme.typography.subtitle1
+                                    )
+
+                                    Text(
+                                        modifier = Modifier.padding(bottom = 4.dp, start = 8.dp),
+                                        text = "(${weapon.weaponStats?.fireMode?.uiValue ?: "Unknown"})",
                                         style = MaterialTheme.typography.subtitle1
                                     )
                                 }
-                            }
 
+                                weapon.weaponStats?.let { weaponStats ->
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            painterResource(id = if (isSystemInDarkTheme()) R.drawable.wall_penetration_dark else R.drawable.wall_penetration_light),
+                                            "wall_penetration",
+                                            tint = Color.Unspecified,
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .clip(MaterialTheme.shapes.medium)
+                                        )
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                bottom = 4.dp,
+                                                start = 2.dp
+                                            ),
+                                            text = weaponStats.wallPenetration?.uiValue
+                                                ?: "Unknown",
+                                            style = MaterialTheme.typography.subtitle1
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
+                        state.skins?.forEach {
+                            WeaponSkinCollection(it, imageLoader = imageLoader, onSelectSkin)
                         }
                     }
-                    state.skins?.forEach {
-                        WeaponSkinCollection(it, imageLoader = imageLoader, onSelectSkin)
-                    }
                 }
-            }
-            if (state.progressBarState == ProgressBarState.Loading) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
+                if (state.progressBarState == ProgressBarState.Loading) {
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                }
             }
         }
     }
@@ -184,7 +207,7 @@ fun WeaponSkinCollection(
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(4.dp)
-    ){
+    ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = skin.displayName
