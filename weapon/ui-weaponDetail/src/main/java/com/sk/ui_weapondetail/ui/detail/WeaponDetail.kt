@@ -68,101 +68,114 @@ fun WeaponDetail(
                                 contentScale = ContentScale.Fit
                             )
 
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(12.dp)
+                            //Todo -> 2 colors for light and dark
+                            Surface(
+                                elevation = 10.dp,
+                                color = MaterialTheme.colors.primarySurface,
+                                shape = MaterialTheme.shapes.large
                             ) {
-
-                                Row(
+                                Column(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Start
+                                        .fillMaxSize()
+                                        .padding(12.dp)
                                 ) {
+
                                     Row(
                                         modifier = Modifier
-                                            .align(Alignment.CenterVertically)
-                                            .weight(6f)
+                                            .fillMaxWidth()
+                                            .padding(bottom = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start
                                     ) {
-                                        Text(
-                                            modifier = Modifier
-                                                .padding(end = 8.dp),
-                                            text = weapon.displayName,
-                                            style = MaterialTheme.typography.h1
-                                        )
-                                        val iconPainter = rememberImagePainter(
-                                            weapon.killStreamIcon,
-                                            imageLoader = imageLoader,
-                                            builder = {
-                                                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                                            }
-                                        )
-
-                                        Image(
-                                            modifier = Modifier
-                                                .height(40.dp)
-                                                .width(40.dp),
-                                            painter = iconPainter,
-                                            contentDescription = weapon.displayName,
-                                            contentScale = ContentScale.Fit
-                                        )
-                                    }
-
-                                    weapon.shopData?.let {
-                                        Text(
+                                        Row(
                                             modifier = Modifier
                                                 .align(Alignment.CenterVertically)
-                                                .weight(2f),
-                                            text = it.cost.toString(),
-                                            style = MaterialTheme.typography.h2
-                                        )
+                                                .weight(6f)
+                                        ) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(end = 8.dp),
+                                                text = weapon.displayName,
+                                                style = MaterialTheme.typography.h1
+                                            )
+                                            val iconPainter = rememberImagePainter(
+                                                weapon.killStreamIcon,
+                                                imageLoader = imageLoader,
+                                                builder = {
+                                                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                                                }
+                                            )
+
+                                            Image(
+                                                modifier = Modifier
+                                                    .height(40.dp)
+                                                    .width(40.dp),
+                                                painter = iconPainter,
+                                                contentDescription = weapon.displayName,
+                                                contentScale = ContentScale.Fit
+                                            )
+                                        }
+
+                                        weapon.shopData?.let {
+                                            Text(
+                                                modifier = Modifier
+                                                    .align(Alignment.CenterVertically)
+                                                    .weight(2f),
+                                                text = it.cost.toString(),
+                                                style = MaterialTheme.typography.h2
+                                            )
+                                        }
                                     }
-                                }
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceAround,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        modifier = Modifier.padding(bottom = 4.dp, start = 4.dp),
-                                        text = weapon.category.uiValue,
-                                        style = MaterialTheme.typography.subtitle1
-                                    )
-
-                                    Text(
-                                        modifier = Modifier.padding(bottom = 4.dp, start = 8.dp),
-                                        text = "(${weapon.weaponStats?.fireMode?.uiValue ?: "Unknown"})",
-                                        style = MaterialTheme.typography.subtitle1
-                                    )
-                                }
-
-                                weapon.weaponStats?.let { weaponStats ->
                                     Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.Start,
+                                        horizontalArrangement = Arrangement.SpaceAround,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Icon(
-                                            painterResource(id = if (isSystemInDarkTheme()) R.drawable.wall_penetration_dark else R.drawable.wall_penetration_light),
-                                            "wall_penetration",
-                                            tint = Color.Unspecified,
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .clip(MaterialTheme.shapes.medium)
-                                        )
                                         Text(
                                             modifier = Modifier.padding(
                                                 bottom = 4.dp,
-                                                start = 2.dp
+                                                start = 4.dp
                                             ),
-                                            text = weaponStats.wallPenetration?.uiValue
-                                                ?: "Unknown",
+                                            text = weapon.category.uiValue,
+                                            style = MaterialTheme.typography.subtitle1
+                                        )
+
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                bottom = 4.dp,
+                                                start = 8.dp
+                                            ),
+                                            text = "(${weapon.weaponStats?.fireMode?.uiValue ?: "Unknown"})",
                                             style = MaterialTheme.typography.subtitle1
                                         )
                                     }
-                                }
 
+                                    weapon.weaponStats?.let { weaponStats ->
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.Start,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                painterResource(id = if (isSystemInDarkTheme()) R.drawable.wall_penetration_dark else R.drawable.wall_penetration_light),
+                                                "wall_penetration",
+                                                tint = Color.Unspecified,
+                                                modifier = Modifier
+                                                    .size(40.dp)
+                                                    .clip(MaterialTheme.shapes.medium)
+                                            )
+                                            Text(
+                                                modifier = Modifier.padding(
+                                                    bottom = 4.dp,
+                                                    start = 2.dp
+                                                ),
+                                                text = weaponStats.wallPenetration?.uiValue
+                                                    ?: "Unknown",
+                                                style = MaterialTheme.typography.subtitle1
+                                            )
+                                        }
+                                    }
+
+                                }
                             }
                         }
                         state.skins?.forEach {
@@ -178,6 +191,7 @@ fun WeaponDetail(
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun WeaponBaseStats(
     weapon: Weapon,
@@ -188,10 +202,11 @@ fun WeaponBaseStats(
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium
     ) {
-        Column(
+        LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(padding)
+                .padding(padding),
+            cells = GridCells.Fixed(6)
         ) {
 
         }
@@ -206,7 +221,8 @@ fun WeaponSkinCollection(
 ) {
     Card(
         elevation = 4.dp,
-        modifier = Modifier.padding(4.dp)
+        modifier = Modifier.padding(4.dp),
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),

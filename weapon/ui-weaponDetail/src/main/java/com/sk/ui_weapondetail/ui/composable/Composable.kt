@@ -6,6 +6,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -271,3 +274,41 @@ private fun Swatch(
         contentScale = ContentScale.Fit
     )
 }
+
+@Composable
+fun StatBox(
+    title: String,
+    value: String,
+    units: String
+) {
+    Card(
+        elevation = 5.dp,
+        backgroundColor = MaterialTheme.colors.surface,
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier.padding(5.dp)
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                style = MaterialTheme.typography.h4,
+                text = title
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.h3
+            )
+            Text(
+                text = units,
+                style = MaterialTheme.typography.h4
+            )
+        }
+    }
+
+}
+
+
