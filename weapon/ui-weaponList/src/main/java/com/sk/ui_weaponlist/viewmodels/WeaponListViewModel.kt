@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sk.core.domain.DataState
 import com.sk.core.domain.UIComponent
 import com.sk.core.util.Logger
+import com.sk.ui_weaponlist.ui.WeaponListEvent
 import com.sk.ui_weaponlist.ui.WeaponListState
 import com.sk.weapon_interactors.GetWeapons
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,15 @@ constructor
     val state: MutableState<WeaponListState> = mutableStateOf(WeaponListState())
 
     init {
-        getWeapons()
+        onTriggerEvent(WeaponListEvent.GetWeaponList)
+    }
+
+    fun onTriggerEvent(event: WeaponListEvent){
+        when (event){
+            is WeaponListEvent.GetWeaponList -> {
+                getWeapons()
+            }
+        }
     }
 
     private fun getWeapons() {

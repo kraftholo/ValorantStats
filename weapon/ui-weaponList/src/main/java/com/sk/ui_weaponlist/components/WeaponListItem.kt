@@ -61,7 +61,7 @@ fun WeaponListItem(
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(.5f) // fill 80% of remaining width
+                    .fillMaxWidth(.5f) // fill 50% of remaining width
                     .padding(start = 12.dp)
             ) {
                 Text(
@@ -82,14 +82,13 @@ fun WeaponListItem(
             }
             Column(
                 modifier = Modifier
-                    .fillMaxWidth() // Fill the rest of the width (100% - 80% = 20%)
+                    .fillMaxWidth() // Fill the rest of the width
                     .padding(end = 12.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
                     text = weapon.weaponStats?.fireMode?.uiValue ?: "",
                     style = MaterialTheme.typography.caption,
-                    //color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
                 )
 
             }

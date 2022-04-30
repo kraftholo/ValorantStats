@@ -20,7 +20,7 @@ import javax.inject.Inject
 class WeaponDetailViewModel
 @Inject
 constructor(
-    val getWeaponFromCache: GetWeaponFromCache,
+    val getWeaponFromCache: GetWeaponFromCache,       //Much better way than parcelizing the weapon and passing it whole
     val getSkins: GetSkins,
     val savedStateHandle: SavedStateHandle,
     //val logger: Logger

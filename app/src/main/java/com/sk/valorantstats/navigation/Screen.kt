@@ -5,6 +5,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NamedNavArgument
 import androidx.navigation.compose.navArgument
 
+// All the possible composables of the screens that you can visit in the application
 sealed class Screen(
     val route: String,
     val arguments: List<NamedNavArgument>

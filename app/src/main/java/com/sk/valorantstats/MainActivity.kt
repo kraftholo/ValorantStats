@@ -38,19 +38,21 @@ class MainActivity : ComponentActivity() {
             ValorantStatsTheme {
                 // navigation setup
                 val navController = rememberNavController()
-                NavHost(navController = navController,
+                NavHost(
+                    navController = navController,
                     startDestination = Screen.WeaponList.route,
                     builder = {
-                        //This will add the two destinations to my navigation graph
-                        addWeaponDetail(
-                            route = Screen.WeaponDetail.route + "/{weaponUUID}",
-                            Screen.WeaponDetail.arguments,
-                            navController = navController
-                        )
+                        //This will add the 3 destinations to my navigation graph
 
                         addWeaponList(
                             route = Screen.WeaponList.route,
                             arguments = emptyList(),
+                            navController = navController
+                        )
+
+                        addWeaponDetail(
+                            route = Screen.WeaponDetail.route + "/{weaponUUID}",      //Imp: the string here should match the one mentioned in Screen.kt-> "navArgument("weaponUUID")"
+                            arguments = Screen.WeaponDetail.arguments,
                             navController = navController
                         )
 
@@ -69,6 +71,26 @@ class MainActivity : ComponentActivity() {
 
 
     //Helper Extension functions to add destinations into the navigation graph
+    private fun NavGraphBuilder.addWeaponList(
+        route: String,
+        arguments: List<NamedNavArgument>,
+        navController: NavController
+    ) {
+        return composable(
+            route = route
+        ) {
+            val viewModel: WeaponListViewModel = hiltViewModel()
+            WeaponList(
+                viewModel.state.value,
+                imageLoader,
+                navigateToDetailScreen = { weaponUUID ->
+                    navController.navigate("${Screen.WeaponDetail.route}/$weaponUUID")
+                }
+            )
+
+        }
+    }
+
     private fun NavGraphBuilder.addWeaponDetail(
         route: String,
         arguments: List<NamedNavArgument>,
@@ -89,25 +111,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun NavGraphBuilder.addWeaponList(
-        route: String,
-        arguments: List<NamedNavArgument>,
-        navController: NavController
-    ) {
-        return composable(
-            route = route
-        ) {
-            val viewModel: WeaponListViewModel = hiltViewModel()
-            WeaponList(
-                viewModel.state.value,
-                imageLoader,
-                navigateToDetailScreen = { weaponUUID ->
-                    navController.navigate("${Screen.WeaponDetail.route}/$weaponUUID")
-                }
-            )
-
-        }
-    }
 
     @ExperimentalAnimationApi
     private fun NavGraphBuilder.addWeaponSkinDetail(

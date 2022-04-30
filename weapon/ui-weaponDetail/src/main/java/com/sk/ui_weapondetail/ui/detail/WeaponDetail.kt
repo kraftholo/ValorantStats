@@ -224,14 +224,16 @@ fun WeaponSkinCollection(
         modifier = Modifier.padding(4.dp),
         backgroundColor = MaterialTheme.colors.surface
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = skin.displayName
-        )
-        ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader)
-        if (skin.hasLevels) {
-            Button(onClick = { onSelectSkin(skin.uuid) }) {
-                Text("Show Skin Levels")
+        Column(){
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = skin.displayName
+            )
+            ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader)
+            if (skin.hasLevels) {
+                Button(onClick = { onSelectSkin(skin.uuid) }, modifier = Modifier.fillMaxWidth(0.2f) ) {
+                    Text("Show Skin Levels")
+                }
             }
         }
     }

@@ -19,11 +19,11 @@ import coil.ImageLoader
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.sk.ui_weapondetail.ui.composable.ChromaDisplayWithVideo
+import com.sk.ui_weapondetail.ui.composable.ChromaDisplayForSkinDetail
+import com.sk.weapon_domain.skin.Chroma
 import com.sk.weapon_domain.skin.Level
 import com.sk.weapon_domain.skin.LevelItemType
 
@@ -35,11 +35,11 @@ fun WeaponSkinDetail(
     onBack : ()-> Unit
 ) {
 
+    //Exoplayer
     val context = LocalContext.current
     val exoPlayer = remember {
         SimpleExoPlayer.Builder(context).build()
     }
-
     val lifecycleOwner by rememberUpdatedState(LocalLifecycleOwner.current)
     DisposableEffect(lifecycleOwner) {
         val lifecycle = lifecycleOwner.
@@ -67,8 +67,27 @@ fun WeaponSkinDetail(
         }
     }
 
-    val currentlyPlayingItem = remember { mutableStateOf(state.levels?.let { it[0] }) }
-    updateCurrentlyPlayingItem(exoPlayer = exoPlayer, level = currentlyPlayingItem.value)
+
+    //Recomposition (video changes) on the basis of "Levels" (VFX/Animation etc) and Chromas
+    val currentlyPlayingLevel = remember { mutableStateOf(state.levels?.let { it[0] }) }
+    val currentlyPlayingChroma = remember{ mutableStateOf(state.skin?.let { it.chromas[0]})}
+
+    //Autoplay 1st Level video
+    updateCurrentlyPlayingLevel(exoPlayer = exoPlayer, level = currentlyPlayingLevel.value)
+
+    //Play all chroma videos;
+    // For base chroma -> Play the base level video
+    state.skin?.let { skin ->
+        if (skin.chromas[0] != currentlyPlayingChroma.value) {
+            updateCurrentlyPlayingChroma(
+                exoPlayer = exoPlayer,
+                chroma = currentlyPlayingChroma.value
+            )
+        } else {
+            state.levels?.let { updateCurrentlyPlayingLevel(exoPlayer = exoPlayer, level = it[0]) }
+        }
+
+    }
 
     Column {
         TopAppBar(
@@ -87,9 +106,13 @@ fun WeaponSkinDetail(
                 text = it.displayName,
                 style = MaterialTheme.typography.h1
             )
-            ChromaDisplayWithVideo(chromaList = it.chromas, imageLoader = imageLoader)
+
+            ChromaDisplayForSkinDetail(chromaList = it.chromas, imageLoader = imageLoader) { idx ->
+                currentlyPlayingChroma.value = state.skin.chromas[idx]
+            }
         }
 
+        //Composable to show list of levels
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,7 +126,7 @@ fun WeaponSkinDetail(
                     is LevelItemType.VFX -> {
                         Button(onClick = {
                             //check should always pass
-                            currentlyPlayingItem.value = level
+                            currentlyPlayingLevel.value = level
                         }
                         ) {
                             Text(text = LevelItemType.VFX.uiValue)
@@ -112,7 +135,7 @@ fun WeaponSkinDetail(
                     is LevelItemType.Animation -> {
                         Button(onClick = {
                             //check should always pass
-                            currentlyPlayingItem.value = level
+                            currentlyPlayingLevel.value = level
                         }) {
                             Text(text = LevelItemType.Animation.uiValue)
                         }
@@ -121,7 +144,7 @@ fun WeaponSkinDetail(
                     is LevelItemType.Finisher -> {
                         Button(onClick = {
                             //check should always pass
-                            currentlyPlayingItem.value = level
+                            currentlyPlayingLevel.value = level
                         }) {
                             Text(text = LevelItemType.Finisher.uiValue)
                         }
@@ -130,7 +153,7 @@ fun WeaponSkinDetail(
                     is LevelItemType.KillCounter -> {
                         Button(onClick = {
                             //check should always pass
-                            currentlyPlayingItem.value = level
+                            currentlyPlayingLevel.value = level
                         }) {
                             Text(text = LevelItemType.KillCounter.uiValue)
                         }
@@ -144,6 +167,7 @@ fun WeaponSkinDetail(
             }
         }
 
+        //Actual Exoplayer in AndroidView
         Box(
             modifier = Modifier.defaultMinSize(minHeight = 200.dp)
         ) {
@@ -158,9 +182,31 @@ fun WeaponSkinDetail(
     }
 }
 
+@Composable
+private fun updateCurrentlyPlayingChroma(exoPlayer: SimpleExoPlayer, chroma:Chroma?){
+    val context = LocalContext.current
+    LaunchedEffect(chroma) {
+        exoPlayer.apply {
+            chroma?.let {
+                val dataSourceFactory = DefaultDataSourceFactory(
+                    context,
+                    Util.getUserAgent(context, context.packageName)
+                )
+                val source = ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(MediaItem.fromUri(Uri.parse(chroma.streamedVideo)))
+
+                setMediaSource(source)
+                prepare()
+                playWhenReady = true
+            } ?: stop()
+        }
+    }
+
+}
+
 
 @Composable
-private fun updateCurrentlyPlayingItem(exoPlayer: SimpleExoPlayer, level: Level?) {
+private fun updateCurrentlyPlayingLevel(exoPlayer: SimpleExoPlayer, level: Level?) {
     val context = LocalContext.current
 
     LaunchedEffect(level) {

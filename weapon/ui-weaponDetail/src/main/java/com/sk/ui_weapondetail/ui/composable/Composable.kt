@@ -12,12 +12,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -73,7 +71,7 @@ fun ChromaDisplay(chromaList: List<Chroma>, imageLoader: ImageLoader) {
                         imageLoader = imageLoader,
                         index = index,
                         onSwatchSelected = { idx ->
-                            selectedChroma.value = chromaList[idx]
+                            selectedChroma.value = chromaList[idx]              // value change causes recomposition
                         },
                         showBorder = selectedChroma.value == chromaList[index]
                     )
@@ -84,6 +82,7 @@ fun ChromaDisplay(chromaList: List<Chroma>, imageLoader: ImageLoader) {
 }
 
 
+//Todo : Remove later
 @ExperimentalAnimationApi
 @Composable
 fun ChromaDisplayWithVideo(
@@ -210,6 +209,55 @@ fun ChromaDisplayWithVideo(
     }
 }
 
+
+@Composable
+fun ChromaDisplayForSkinDetail(
+    chromaList: List<Chroma>,
+    imageLoader: ImageLoader,
+    playChromaVideo: (idx: Int) -> Unit
+) {
+    val selectedChroma = remember { mutableStateOf(chromaList[0]) }
+    val painter = rememberImagePainter(
+        selectedChroma.value.fullRender,
+        imageLoader = imageLoader,
+        builder = {
+            placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+        }
+    )
+
+    Column {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .defaultMinSize(minHeight = 160.dp),
+            painter = painter,
+            contentDescription = selectedChroma.value.displayName,
+            contentScale = ContentScale.Fit
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+            chromaList.forEachIndexed { index, chroma ->
+                chroma.swatch?.let {
+                    Swatch(
+                        swatchIcon = it,
+                        imageLoader = imageLoader,
+                        index = index,
+                        onSwatchSelected = { idx ->
+                            selectedChroma.value = chromaList[idx]
+                            playChromaVideo(idx)                               //Will trigger exoplayer in WeaponSkinDetail
+                        },
+                        showBorder = selectedChroma.value == chromaList[index]
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun updateCurrentlyPlayingItem(
