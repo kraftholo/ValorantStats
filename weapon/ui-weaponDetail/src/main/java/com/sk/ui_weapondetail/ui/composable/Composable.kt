@@ -1,35 +1,20 @@
 package com.sk.ui_weapondetail.ui.composable
 
-import android.net.Uri
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.sk.ui_weaponlist.R
 import com.sk.weapon_domain.skin.Chroma
 
@@ -83,7 +68,7 @@ fun ChromaDisplay(chromaList: List<Chroma>, imageLoader: ImageLoader) {
 
 
 //Todo : Remove later
-@ExperimentalAnimationApi
+/*@ExperimentalAnimationApi
 @Composable
 fun ChromaDisplayWithVideo(
     chromaList: List<Chroma>,
@@ -207,7 +192,7 @@ fun ChromaDisplayWithVideo(
         }
 
     }
-}
+}*/
 
 
 @Composable
@@ -260,34 +245,6 @@ fun ChromaDisplayForSkinDetail(
 }
 
 @Composable
-private fun updateCurrentlyPlayingItem(
-    exoPlayer: SimpleExoPlayer,
-    chroma: Chroma,
-    playOnReady: Boolean
-) {
-    chroma.streamedVideo?.let {
-        exoPlayer.let { player ->
-            val context = LocalContext.current
-            LaunchedEffect(chroma) {
-                player.apply {
-                    val dataSourceFactory = DefaultDataSourceFactory(
-                        context,
-                        Util.getUserAgent(context, context.packageName)
-                    )
-                    val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(MediaItem.fromUri(Uri.parse(it)))
-
-                    setMediaSource(source)
-                    prepare()
-                    playWhenReady = playOnReady
-                }
-            }
-        }
-    } ?: run { exoPlayer.stop() }
-}
-
-
-@Composable
 private fun Swatch(
     swatchIcon: String,
     imageLoader: ImageLoader,
@@ -338,25 +295,28 @@ fun StatBox(
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                style = MaterialTheme.typography.h4,
-                text = title
-            )
+            Surface(
+                color = Color.LightGray
+            ) {
+                Text(
+                    style = MaterialTheme.typography.h6,
+                    text = title
+                )
+            }
             Text(
                 text = value,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = units,
-                style = MaterialTheme.typography.h4
+                style = MaterialTheme.typography.h6
             )
         }
     }
-
 }
 
 

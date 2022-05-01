@@ -89,12 +89,12 @@ fun WeaponSkinDetail(
 
     }
 
-    Column {
+    Column{
         TopAppBar(
             title = { Text(text = "Skin Details") },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Rounded.ArrowBack,"")
+                    Icon(Icons.Rounded.ArrowBack, "")
                 }
             }
         )
@@ -112,78 +112,93 @@ fun WeaponSkinDetail(
             }
         }
 
-        //Composable to show list of levels
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-
+        //Actual Exoplayer in AndroidView
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center
         ) {
-            state.levels?.forEach { level ->
-                when (level.levelItemType) {
-                    is LevelItemType.VFX -> {
-                        Button(onClick = {
-                            //check should always pass
-                            currentlyPlayingLevel.value = level
+            Card(
+                elevation = 4.dp,
+                modifier = Modifier.padding(4.dp),
+                backgroundColor = MaterialTheme.colors.surface
+            ) {
+                Box(
+                    modifier = Modifier.defaultMinSize(minHeight = 200.dp)
+                ) {
+                    AndroidView(
+                        factory = { context ->
+                            PlayerView(context).apply {
+                                player = exoPlayer
+                            }
                         }
-                        ) {
-                            Text(text = LevelItemType.VFX.uiValue)
+                    )
+                }
+            }
+
+            //Composable to show list of levels
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+
+            ) {
+                state.levels?.forEach { level ->
+                    when (level.levelItemType) {
+                        is LevelItemType.VFX -> {
+                            Button(onClick = {
+                                //check should always pass
+                                currentlyPlayingLevel.value = level
+                            }
+                            ) {
+                                Text(text = LevelItemType.VFX.uiValue)
+                            }
                         }
-                    }
-                    is LevelItemType.Animation -> {
-                        Button(onClick = {
-                            //check should always pass
-                            currentlyPlayingLevel.value = level
-                        }) {
-                            Text(text = LevelItemType.Animation.uiValue)
+                        is LevelItemType.Animation -> {
+                            Button(onClick = {
+                                //check should always pass
+                                currentlyPlayingLevel.value = level
+                            }) {
+                                Text(text = LevelItemType.Animation.uiValue)
+                            }
+
+                        }
+                        is LevelItemType.Finisher -> {
+                            Button(onClick = {
+                                //check should always pass
+                                currentlyPlayingLevel.value = level
+                            }) {
+                                Text(text = LevelItemType.Finisher.uiValue)
+                            }
+
+                        }
+                        is LevelItemType.KillCounter -> {
+                            Button(onClick = {
+                                //check should always pass
+                                currentlyPlayingLevel.value = level
+                            }) {
+                                Text(text = LevelItemType.KillCounter.uiValue)
+                            }
+
                         }
 
-                    }
-                    is LevelItemType.Finisher -> {
-                        Button(onClick = {
-                            //check should always pass
-                            currentlyPlayingLevel.value = level
-                        }) {
-                            Text(text = LevelItemType.Finisher.uiValue)
+                        else -> {
+                            //Do nothing
                         }
-
-                    }
-                    is LevelItemType.KillCounter -> {
-                        Button(onClick = {
-                            //check should always pass
-                            currentlyPlayingLevel.value = level
-                        }) {
-                            Text(text = LevelItemType.KillCounter.uiValue)
-                        }
-
-                    }
-
-                    else -> {
-                        //Do nothing
                     }
                 }
             }
-        }
-
-        //Actual Exoplayer in AndroidView
-        Box(
-            modifier = Modifier.defaultMinSize(minHeight = 200.dp)
-        ) {
-            AndroidView(
-                factory = { context ->
-                    PlayerView(context).apply {
-                        player = exoPlayer
-                    }
-                }
-            )
         }
     }
 }
 
 @Composable
 private fun updateCurrentlyPlayingChroma(exoPlayer: SimpleExoPlayer, chroma:Chroma?){
+
+    if (chroma?.streamedVideo == null) return
+
     val context = LocalContext.current
     LaunchedEffect(chroma) {
         exoPlayer.apply {

@@ -13,17 +13,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.sk.core.domain.ProgressBarState
 import com.sk.ui_weapondetail.R
 import com.sk.ui_weapondetail.ui.composable.ChromaDisplay
+import com.sk.ui_weapondetail.ui.composable.StatBox
 
 import com.sk.weapon_domain.Weapon
 import com.sk.weapon_domain.skin.Skin
 
+@ExperimentalFoundationApi
 @Composable
 fun WeaponDetail(
     state: WeaponDetailState,
@@ -59,6 +60,7 @@ fun WeaponDetail(
                                 }
                             )
 
+                            //Main Weapon Image
                             Image(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -174,10 +176,12 @@ fun WeaponDetail(
                                             )
                                         }
                                     }
-
+                                    WeaponBaseStats(state.weapon)
                                 }
+
                             }
                         }
+
                         state.skins?.forEach {
                             WeaponSkinCollection(it, imageLoader = imageLoader, onSelectSkin)
                         }
@@ -194,21 +198,50 @@ fun WeaponDetail(
 @ExperimentalFoundationApi
 @Composable
 fun WeaponBaseStats(
-    weapon: Weapon,
-    padding: Dp,
+    weapon: Weapon
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = 8.dp,
-        shape = MaterialTheme.shapes.medium
-    ) {
-        LazyVerticalGrid(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(padding),
-            cells = GridCells.Fixed(6)
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            weapon.weaponStats?.fireRate?.let {
+                StatBox(title = "FIRE RATE", value = "$it", units = "RDS/SEC")
+            }
+            weapon.weaponStats?.magazineSize?.let {
+                StatBox(title = "MAGAZINE", value = "$it", units = "RDS")
+            }
+            val adsAcc = weapon.weaponStats?.adsStats?.firstBulletAccuracy
+            val hipAcc = weapon.weaponStats?.firstBulletAccuracy
 
+            if (adsAcc != null && hipAcc != null) {
+                StatBox(
+                    title = "1st SHOT SPREAD",
+                    value = "${hipAcc}/${adsAcc}",
+                    units = "DEG (HIP/ADS)"
+                )
+            }
+            weapon.weaponStats?.adsStats?.zoomMultiplier?.let {
+                StatBox(
+                    title = "ZOOM",
+                    value = "${it}x",
+                    units = ""
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            weapon.weaponStats?.equipTimeSeconds?.let {
+                StatBox(title = "EQUIP SPEED", value = "$it", units = "SEC")
+            }
+            weapon.weaponStats?.reloadTimeSeconds?.let {
+                StatBox(title = "RELOAD SPEED", value = "$it", units = "SEC")
+            }
+            weapon.weaponStats?.equipTimeSeconds?.let {
+                StatBox(title = "EQUIP SPEED", value = "$it", units = "SEC")
+            }
         }
     }
 }
@@ -224,15 +257,24 @@ fun WeaponSkinCollection(
         modifier = Modifier.padding(4.dp),
         backgroundColor = MaterialTheme.colors.surface
     ) {
-        Column(){
+        Column() {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = skin.displayName
             )
             ChromaDisplay(chromaList = skin.chromas, imageLoader = imageLoader)
             if (skin.hasLevels) {
-                Button(onClick = { onSelectSkin(skin.uuid) }, modifier = Modifier.fillMaxWidth(0.2f) ) {
-                    Text("Show Skin Levels")
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = { onSelectSkin(skin.uuid) }
+                    ) {
+                        Text("Show Skin Levels")
+                    }
                 }
             }
         }

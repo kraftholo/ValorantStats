@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -23,6 +24,7 @@ import com.sk.viewmodels.WeaponListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@ExperimentalFoundationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -91,6 +93,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @ExperimentalFoundationApi
     private fun NavGraphBuilder.addWeaponDetail(
         route: String,
         arguments: List<NamedNavArgument>,
